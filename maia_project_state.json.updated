@@ -1,0 +1,771 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated_timestamp_utc": "2025-05-14T18:30:00Z",
+  "framework_version_info": {
+    "ai_assisted_dev_bible_version": "0.2.1",
+    "maia_workflow_framework_version": "1.3.0",
+    "catalyst_persona_version": "0.4.1",
+    "forge_persona_version": "0.1.1",
+    "framework_core_app_version": "2.0.0",
+    "lial_version": "1.0.0",
+    "teps_version": "1.0.0",
+    "dcm_version": "1.0.0"
+  },
+  "project_info": {
+    "project_name": "AI-Assisted Framework V2 - Gemini Migration Planning",
+    "project_directory_path_at_save": "/home/philippe/Desktop/ai_assisted_framework_claude/my_new_ai_project"
+  },
+  "active_maia_workflow_instance": {
+    "workflow_definition_source": "Catalyst_Generated_Framework_Core_App_Implementation_Workflow",
+    "workflow_instance_id": "WF-COREAPP-IMP-001",
+    "workflow_name": "Framework Core Application Implementation",
+    "current_step_number": 8,
+    "current_step_name": "Framework Core Application Implementation Completion",
+    "status_notes": "All steps completed. Step 7 (Documentation and Finalization) has been successfully completed, resulting in comprehensive documentation, configuration templates, and a complete release package. The Framework Core Application is now fully implemented, tested, and documented.",
+    "execution_mode_of_current_step": "Standard",
+    "sub_maia_workflow_state_file_path": null,
+    "workflow_variables": {
+      "completed_components": ["LIAL", "TEPS", "DCM", "Framework Core Application"],
+      "current_component": null,
+      "completed_phases": ["Phase 1 Planning", "Phase 2 Planning", "Phase 2 Implementation", "Integration Testing", "Documentation and Finalization"]
+    },
+    "step_outputs_references": {
+      "step_1_component_integration_analysis": "docs/coreapp_component_integration_analysis.md",
+      "step_1_technical_requirements": "docs/coreapp_technical_requirements.md",
+      "step_1_implementation_plan_rfi": "docs/coreapp_implementation_plan_rfi.md",
+      "step_1_completion_summary": "docs/coreapp_step1_completion_summary.md",
+      "step_2_architecture_design": "docs/coreapp_architecture_design.md",
+      "step_2_completion_summary": "docs/coreapp_step2_completion_summary.md",
+      "step_3_implementation_phase1_rfi": "docs/coreapp_implementation_phase1_rfi.md",
+      "step_3_implementation_plan_phase1": "docs/coreapp_implementation_plan_phase1.md",
+      "step_3_completion_summary": "docs/coreapp_step3_completion_summary.md",
+      "step_4_implementation_phase2_rfi": "docs/coreapp_implementation_phase2_rfi.md",
+      "step_4_implementation_plan_phase2": "docs/coreapp_implementation_plan_phase2.md",
+      "step_4_completion_summary": "docs/coreapp_step4_completion_summary.md",
+      "step_5_implementation_phase2_execution_rfi": "docs/coreapp_implementation_phase2_execution_rfi.md",
+      "step_5_completion_summary": "docs/coreapp_step5_completion_summary.md",
+      "step_6_integration_test_plan": "docs/coreapp_integration_test_plan.md",
+      "step_6_integration_test_coverage_analysis": "docs/integration_test_coverage_analysis.md",
+      "step_6_completion_summary": "docs/coreapp_step6_completion_summary.md",
+      "step_7_api_reference": "docs/api_reference.md",
+      "step_7_developer_guide": "docs/DEVELOPER_GUIDE_V2.md",
+      "step_7_user_guide": "docs/USER_GUIDE.md",
+      "step_7_release_package": "dist/",
+      "step_7_completion_summary": "docs/coreapp_step7_completion_summary.md"
+    }
+  },
+  "completed_maia_workflow_instances": [
+    {
+      "workflow_definition_source": "Catalyst_Generated_Outline_Framework_API_Migration_Claude_to_Gemini",
+      "workflow_instance_id": "WF-GEMINI-MIG-PLAN-001",
+      "workflow_name": "Framework API Migration: Claude to Gemini 2.5 Pro",
+      "status": "Completed",
+      "completion_timestamp_utc": "2025-05-12T14:30:00Z",
+      "summary_notes": "Successfully planned the architectural refactor for LLM agnosticism and defined RFIs for implementation. Key artifacts stored in 'migration_planning_v2/' subdirectory.",
+      "outputs_references": {
+        "api_spec_ideas": "migration_planning_v2/M_API_Gemini_Spec_v1.md",
+        "impact_assessment": "migration_planning_v2/M_Impact_Assessment_v1.md",
+        "migration_architecture": "migration_planning_v2/M_Migration_Architecture_v2.md",
+        "rfi_collection_core_app": "migration_planning_v2/rfis_set_v1/RFI-COREAPP-001_summary.md",
+        "rfi_collection_lial": "migration_planning_v2/rfis_set_v1/RFI-LIAL-001_summary.md",
+        "rfi_collection_teps": "migration_planning_v2/rfis_set_v1/RFI-TEPS-001_summary.md",
+        "rfi_collection_dcm": "migration_planning_v2/rfis_set_v1/RFI-DCM-001_summary.md",
+        "rfi_collection_config": "migration_planning_v2/rfis_set_v1/RFI-CONFIG-001_summary.md",
+        "rfi_collection_scripts": "migration_planning_v2/rfis_set_v1/RFI-SCRIPTS-001_summary.md",
+        "rfi_collection_docs_update": "migration_planning_v2/rfis_set_v1/RFI-DOCS-001_summary.md",
+        "documentation_plan": "migration_planning_v2/M_Documentation_Plan_v1.md",
+        "test_plan": "migration_planning_v2/M_Test_Plan_v1.md"
+      }
+    },
+    {
+      "workflow_definition_source": "Catalyst_Generated_LIAL_Implementation_Workflow",
+      "workflow_instance_id": "WF-LIAL-IMP-001",
+      "workflow_name": "LIAL Component Implementation",
+      "status": "Completed",
+      "completion_timestamp_utc": "2025-05-13T12:00:00Z",
+      "summary_notes": "Successfully implemented the LIAL component with Core Interface and Gemini Adapter. Component fully supports the ICERC protocol and complies with the architectural design.",
+      "outputs_references": {
+        "lial_core_interface": "framework_core/lial_core.py",
+        "gemini_adapter": "framework_core/adapters/gemini_adapter.py",
+        "unit_tests_core": "tests/unit/framework_core/test_lial_core.py",
+        "unit_tests_adapter": "tests/unit/framework_core/adapters/test_gemini_adapter.py",
+        "integration_test": "tests/integration/test_lial_integration.py",
+        "documentation": "docs/lial_implementation.md"
+      }
+    },
+    {
+      "workflow_definition_source": "Catalyst_Generated_TEPS_Implementation_Workflow",
+      "workflow_instance_id": "WF-TEPS-IMP-001",
+      "workflow_name": "TEPS Component Implementation",
+      "status": "Completed",
+      "completion_timestamp_utc": "2025-05-13T15:30:00Z",
+      "summary_notes": "Successfully implemented the TEPS (Tool Execution & Permission Service) component that securely handles tool operations with user permission via the ICERC protocol. The implementation includes comprehensive error handling, file operations, and bash command execution capabilities.",
+      "outputs_references": {
+        "teps_implementation": "framework_core/teps.py",
+        "unit_tests": "tests/unit/framework_core/test_teps.py",
+        "integration_tests": "tests/integration/test_teps_integration.py",
+        "documentation": "docs/teps_implementation.md"
+      }
+    },
+    {
+      "workflow_definition_source": "Catalyst_Generated_DCM_Implementation_Workflow",
+      "workflow_instance_id": "WF-DCM-IMP-001",
+      "workflow_name": "DCM Component Implementation",
+      "status": "Completed",
+      "completion_timestamp_utc": "2025-05-13T18:30:00Z",
+      "summary_notes": "Successfully implemented the Dynamic Context Manager (DCM) component responsible for parsing context definition files, loading referenced documents, and providing structured access to these documents. The implementation includes comprehensive file handling, path resolution security, section parsing, and robust error management.",
+      "outputs_references": {
+        "dcm_implementation": "framework_core/dcm.py",
+        "context_file_template": "config/FRAMEWORK_CONTEXT.md.example",
+        "unit_tests": "tests/unit/framework_core/test_dcm.py",
+        "integration_tests": "tests/integration/test_dcm_lial_integration.py",
+        "documentation": "docs/dcm_implementation.md"
+      }
+    }
+  ],
+  "session_context": {
+    "catalyst_notes_to_self": "Completed all 7 steps of the Framework Core Application Implementation workflow. The framework is now fully implemented, tested, documented, and packaged as version 2.0.0. This included the successful implementation of the LLM Agnostic Core Architecture (LACA) with LIAL, TEPS, and DCM components. Comprehensive documentation has been created, including API reference, developer guide, and user guide. A complete release package has been prepared in the dist/ directory."
+  },
+  "pending_user_actions": [],
+  "artifact_manifest": [
+    {
+      "artifact_id": "MIG-ARCH-V2",
+      "description": "Migration Architecture and Design Document for Framework V2 (LIAL/TEPS/DCM)",
+      "path_relative_to_project_dir": "migration_planning_v2/M_Migration_Architecture_v2.md",
+      "version": "1.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-12T14:30:00Z",
+      "tags": ["architecture", "design", "framework-v2", "planning"]
+    },
+    {
+      "artifact_id": "MIG-API-SPEC-IDEAS-V1",
+      "description": "Functional ideas for Gemini-like API and LLM-agnostic core architecture decisions.",
+      "path_relative_to_project_dir": "migration_planning_v2/M_API_Gemini_Spec_v1.md",
+      "version": "1.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-12T14:30:00Z",
+      "tags": ["api-design", "architecture", "framework-v2", "planning"]
+    },
+    {
+      "artifact_id": "MIG-IMPACT-ASSESSMENT-V1",
+      "description": "Impact assessment for changes from original framework to V2 architecture.",
+      "path_relative_to_project_dir": "migration_planning_v2/M_Impact_Assessment_v1.md",
+      "version": "1.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-12T14:30:00Z",
+      "tags": ["impact-analysis", "framework-v2", "planning"]
+    },
+    {
+      "artifact_id": "MIG-DOC-PLAN-V1",
+      "description": "Plan for comprehensive documentation updates for Framework V2.",
+      "path_relative_to_project_dir": "migration_planning_v2/M_Documentation_Plan_v1.md",
+      "version": "1.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-12T14:30:00Z",
+      "tags": ["documentation", "planning", "framework-v2"]
+    },
+    {
+      "artifact_id": "MIG-TEST-PLAN-V1",
+      "description": "High-level test plan for the migrated Framework V2.",
+      "path_relative_to_project_dir": "migration_planning_v2/M_Test_Plan_v1.md",
+      "version": "1.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-12T14:30:00Z",
+      "tags": ["testing", "planning", "framework-v2"]
+    },
+    {
+      "artifact_id": "RFI-COREAPP-001-SUM",
+      "description": "Summary (Pre-Brief & Completion Report) for RFI-COREAPP-001: Framework Core Application",
+      "path_relative_to_project_dir": "migration_planning_v2/rfis_set_v1/RFI-COREAPP-001_summary.md",
+      "version": "1.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-12T14:30:00Z",
+      "tags": ["rfi", "summary", "core-app", "planning"]
+    },
+    {
+      "artifact_id": "RFI-LIAL-001-SUM",
+      "description": "Summary (Pre-Brief & Completion Report) for RFI-LIAL-001: LLM Interaction Abstraction Layer",
+      "path_relative_to_project_dir": "migration_planning_v2/rfis_set_v1/RFI-LIAL-001_summary.md",
+      "version": "1.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-12T14:30:00Z",
+      "tags": ["rfi", "summary", "lial", "planning"]
+    },
+    {
+      "artifact_id": "RFI-TEPS-001-SUM",
+      "description": "Summary (Pre-Brief & Completion Report) for RFI-TEPS-001: Tool Execution & Permission Service",
+      "path_relative_to_project_dir": "migration_planning_v2/rfis_set_v1/RFI-TEPS-001_summary.md",
+      "version": "1.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-12T14:30:00Z",
+      "tags": ["rfi", "summary", "teps", "planning"]
+    },
+    {
+      "artifact_id": "RFI-DCM-001-SUM",
+      "description": "Summary (Pre-Brief & Completion Report) for RFI-DCM-001: Dynamic Context Manager",
+      "path_relative_to_project_dir": "migration_planning_v2/rfis_set_v1/RFI-DCM-001_summary.md",
+      "version": "1.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-12T14:30:00Z",
+      "tags": ["rfi", "summary", "dcm", "planning"]
+    },
+    {
+      "artifact_id": "RFI-CONFIG-001-SUM",
+      "description": "Summary (Pre-Brief & Completion Report) for RFI-CONFIG-001: Configuration System",
+      "path_relative_to_project_dir": "migration_planning_v2/rfis_set_v1/RFI-CONFIG-001_summary.md",
+      "version": "1.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-12T14:30:00Z",
+      "tags": ["rfi", "summary", "config", "planning"]
+    },
+    {
+      "artifact_id": "RFI-SCRIPTS-001-SUM",
+      "description": "Summary (Pre-Brief & Completion Report) for RFI-SCRIPTS-001: Update/Replace start.sh",
+      "path_relative_to_project_dir": "migration_planning_v2/rfis_set_v1/RFI-SCRIPTS-001_summary.md",
+      "version": "1.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-12T14:30:00Z",
+      "tags": ["rfi", "summary", "scripts", "planning"]
+    },
+    {
+      "artifact_id": "RFI-DOCS-001-SUM",
+      "description": "Summary (Pre-Brief & Completion Report) for RFI-DOCS-001: Initial Draft of Updated Core Design Documents",
+      "path_relative_to_project_dir": "migration_planning_v2/rfis_set_v1/RFI-DOCS-001_summary.md",
+      "version": "1.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-12T14:30:00Z",
+      "tags": ["rfi", "summary", "documentation", "planning"]
+    },
+    {
+      "artifact_id": "LIAL-CORE-IMPL",
+      "description": "Core LIAL Interface Implementation",
+      "path_relative_to_project_dir": "framework_core/lial_core.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-13T10:30:00Z",
+      "tags": ["implementation", "lial", "framework-v2", "core-interface"]
+    },
+    {
+      "artifact_id": "GEMINI-ADAPTER-IMPL",
+      "description": "Gemini LLM Adapter Implementation",
+      "path_relative_to_project_dir": "framework_core/adapters/gemini_adapter.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-13T11:00:00Z",
+      "tags": ["implementation", "lial", "framework-v2", "gemini", "adapter"]
+    },
+    {
+      "artifact_id": "LIAL-UNIT-TESTS",
+      "description": "LIAL Unit Tests",
+      "path_relative_to_project_dir": "tests/unit/framework_core/test_lial_core.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-13T11:15:00Z",
+      "tags": ["testing", "unit-tests", "lial", "framework-v2"]
+    },
+    {
+      "artifact_id": "GEMINI-ADAPTER-TESTS",
+      "description": "Gemini Adapter Unit Tests",
+      "path_relative_to_project_dir": "tests/unit/framework_core/adapters/test_gemini_adapter.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-13T11:30:00Z",
+      "tags": ["testing", "unit-tests", "gemini", "adapter", "framework-v2"]
+    },
+    {
+      "artifact_id": "LIAL-INTEGRATION-TEST",
+      "description": "LIAL Integration Test",
+      "path_relative_to_project_dir": "tests/integration/test_lial_integration.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-13T11:45:00Z",
+      "tags": ["testing", "integration-test", "lial", "framework-v2"]
+    },
+    {
+      "artifact_id": "LIAL-DOCUMENTATION",
+      "description": "LIAL Implementation Documentation",
+      "path_relative_to_project_dir": "docs/lial_implementation.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-13T12:00:00Z",
+      "tags": ["documentation", "lial", "framework-v2"]
+    },
+    {
+      "artifact_id": "TEPS-CORE-IMPL",
+      "description": "Tool Execution & Permission Service Implementation",
+      "path_relative_to_project_dir": "framework_core/teps.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-13T14:30:00Z",
+      "tags": ["implementation", "teps", "framework-v2", "core-component"]
+    },
+    {
+      "artifact_id": "TEPS-UNIT-TESTS",
+      "description": "TEPS Unit Tests",
+      "path_relative_to_project_dir": "tests/unit/framework_core/test_teps.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-13T14:45:00Z",
+      "tags": ["testing", "unit-tests", "teps", "framework-v2"]
+    },
+    {
+      "artifact_id": "TEPS-INTEGRATION-TESTS",
+      "description": "TEPS Integration Tests",
+      "path_relative_to_project_dir": "tests/integration/test_teps_integration.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-13T15:00:00Z",
+      "tags": ["testing", "integration-test", "teps", "framework-v2"]
+    },
+    {
+      "artifact_id": "TEPS-DOCUMENTATION",
+      "description": "TEPS Implementation Documentation",
+      "path_relative_to_project_dir": "docs/teps_implementation.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-13T15:15:00Z",
+      "tags": ["documentation", "teps", "framework-v2"]
+    },
+    {
+      "artifact_id": "RFI-TEPS-002",
+      "description": "Request for Implementation for TEPS Component",
+      "path_relative_to_project_dir": "docs/rfi_teps_002.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-13T13:30:00Z",
+      "tags": ["rfi", "teps", "implementation", "framework-v2"]
+    },
+    {
+      "artifact_id": "DCM-CORE-IMPL",
+      "description": "Dynamic Context Manager Implementation",
+      "path_relative_to_project_dir": "framework_core/dcm.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-13T17:00:00Z",
+      "tags": ["implementation", "dcm", "framework-v2", "core-component"]
+    },
+    {
+      "artifact_id": "DCM-CONTEXT-TEMPLATE",
+      "description": "FRAMEWORK_CONTEXT.md Template for DCM",
+      "path_relative_to_project_dir": "config/FRAMEWORK_CONTEXT.md.example",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-13T17:15:00Z",
+      "tags": ["template", "dcm", "framework-v2", "configuration"]
+    },
+    {
+      "artifact_id": "DCM-UNIT-TESTS",
+      "description": "DCM Unit Tests",
+      "path_relative_to_project_dir": "tests/unit/framework_core/test_dcm.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-13T17:30:00Z",
+      "tags": ["testing", "unit-tests", "dcm", "framework-v2"]
+    },
+    {
+      "artifact_id": "DCM-INTEGRATION-TESTS",
+      "description": "DCM-LIAL Integration Tests",
+      "path_relative_to_project_dir": "tests/integration/test_dcm_lial_integration.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-13T18:00:00Z",
+      "tags": ["testing", "integration-test", "dcm", "lial", "framework-v2"]
+    },
+    {
+      "artifact_id": "DCM-DOCUMENTATION",
+      "description": "DCM Implementation Documentation",
+      "path_relative_to_project_dir": "docs/dcm_implementation.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-13T18:15:00Z",
+      "tags": ["documentation", "dcm", "framework-v2"]
+    },
+    {
+      "artifact_id": "RFI-DCM-002",
+      "description": "Request for Implementation for DCM Component",
+      "path_relative_to_project_dir": "docs/rfi_dcm_002.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-13T16:30:00Z",
+      "tags": ["rfi", "dcm", "implementation", "framework-v2"]
+    },
+    {
+      "artifact_id": "COREAPP-COMP-INT-ANALYSIS",
+      "description": "Component Integration Analysis for Framework Core Application",
+      "path_relative_to_project_dir": "docs/coreapp_component_integration_analysis.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-13T20:31:10Z",
+      "tags": ["analysis", "design", "core-app", "framework-v2", "integration"]
+    },
+    {
+      "artifact_id": "COREAPP-TECH-REQS",
+      "description": "Technical Requirements for Framework Core Application",
+      "path_relative_to_project_dir": "docs/coreapp_technical_requirements.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-13T20:31:10Z",
+      "tags": ["requirements", "core-app", "framework-v2", "specifications"]
+    },
+    {
+      "artifact_id": "COREAPP-IMPL-PLAN-RFI",
+      "description": "Implementation Plan and RFI for Framework Core Application",
+      "path_relative_to_project_dir": "docs/coreapp_implementation_plan_rfi.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-13T20:31:10Z",
+      "tags": ["rfi", "implementation-plan", "core-app", "framework-v2"]
+    },
+    {
+      "artifact_id": "COREAPP-STEP1-SUMMARY",
+      "description": "Step 1 Completion Summary for Framework Core Application Implementation",
+      "path_relative_to_project_dir": "docs/coreapp_step1_completion_summary.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-13T20:31:10Z",
+      "tags": ["summary", "core-app", "framework-v2", "milestone"]
+    },
+    {
+      "artifact_id": "COREAPP-ARCHITECTURE-DESIGN",
+      "description": "Detailed Architecture Design for Framework Core Application",
+      "path_relative_to_project_dir": "docs/coreapp_architecture_design.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-13T20:44:57Z",
+      "tags": ["architecture", "design", "core-app", "framework-v2", "class-structure"]
+    },
+    {
+      "artifact_id": "COREAPP-STEP2-SUMMARY",
+      "description": "Step 2 Completion Summary for Framework Core Application Implementation",
+      "path_relative_to_project_dir": "docs/coreapp_step2_completion_summary.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-13T20:44:57Z",
+      "tags": ["summary", "core-app", "framework-v2", "milestone"]
+    },
+    {
+      "artifact_id": "COREAPP-IMPL-PHASE1-RFI",
+      "description": "Request for Implementation for Framework Core Application Phase 1",
+      "path_relative_to_project_dir": "docs/coreapp_implementation_phase1_rfi.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-13T21:15:00Z",
+      "tags": ["rfi", "implementation", "core-app", "framework-v2", "phase1"]
+    },
+    {
+      "artifact_id": "COREAPP-IMPL-PLAN-PHASE1",
+      "description": "Detailed Implementation Plan for Framework Core Application Phase 1",
+      "path_relative_to_project_dir": "docs/coreapp_implementation_plan_phase1.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-13T21:20:00Z",
+      "tags": ["implementation-plan", "core-app", "framework-v2", "phase1"]
+    },
+    {
+      "artifact_id": "COREAPP-STEP3-SUMMARY",
+      "description": "Step 3 Completion Summary for Framework Core Application Implementation",
+      "path_relative_to_project_dir": "docs/coreapp_step3_completion_summary.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-13T21:25:00Z",
+      "tags": ["summary", "core-app", "framework-v2", "milestone", "phase1-planning"]
+    },
+    {
+      "artifact_id": "COREAPP-IMPL-PHASE2-RFI",
+      "description": "Request for Implementation for Framework Core Application Phase 2",
+      "path_relative_to_project_dir": "docs/coreapp_implementation_phase2_rfi.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-13T23:15:00Z",
+      "tags": ["rfi", "implementation", "core-app", "framework-v2", "phase2"]
+    },
+    {
+      "artifact_id": "COREAPP-IMPL-PLAN-PHASE2",
+      "description": "Detailed Implementation Plan for Framework Core Application Phase 2",
+      "path_relative_to_project_dir": "docs/coreapp_implementation_plan_phase2.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-13T23:20:00Z",
+      "tags": ["implementation-plan", "core-app", "framework-v2", "phase2"]
+    },
+    {
+      "artifact_id": "COREAPP-STEP4-SUMMARY",
+      "description": "Step 4 Completion Summary for Framework Core Application Implementation",
+      "path_relative_to_project_dir": "docs/coreapp_step4_completion_summary.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-13T23:25:00Z",
+      "tags": ["summary", "core-app", "framework-v2", "milestone", "phase2-planning"]
+    },
+    {
+      "artifact_id": "COREAPP-IMPL-PHASE2-EXEC-RFI",
+      "description": "Request for Implementation for Executing Framework Core Application Phase 2",
+      "path_relative_to_project_dir": "docs/coreapp_implementation_phase2_execution_rfi.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-13T21:22:50Z",
+      "tags": ["rfi", "implementation", "core-app", "framework-v2", "phase2", "execution"]
+    },
+    {
+      "artifact_id": "COREAPP-MESSAGE-MANAGER-IMPL",
+      "description": "Message Manager Implementation",
+      "path_relative_to_project_dir": "framework_core/message_manager.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-14T08:30:00Z",
+      "tags": ["implementation", "core-app", "framework-v2", "phase2", "message-manager"]
+    },
+    {
+      "artifact_id": "COREAPP-TOOL-REQUEST-HANDLER-IMPL",
+      "description": "Tool Request Handler Implementation",
+      "path_relative_to_project_dir": "framework_core/tool_request_handler.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-14T08:45:00Z",
+      "tags": ["implementation", "core-app", "framework-v2", "phase2", "tool-request-handler"]
+    },
+    {
+      "artifact_id": "COREAPP-UI-MANAGER-IMPL",
+      "description": "User Interface Manager Implementation",
+      "path_relative_to_project_dir": "framework_core/ui_manager.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-14T09:00:00Z",
+      "tags": ["implementation", "core-app", "framework-v2", "phase2", "ui-manager"]
+    },
+    {
+      "artifact_id": "COREAPP-CONTROLLER-IMPL",
+      "description": "Framework Controller Implementation with Main Loop",
+      "path_relative_to_project_dir": "framework_core/controller.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-14T09:15:00Z",
+      "tags": ["implementation", "core-app", "framework-v2", "phase2", "controller", "main-loop"]
+    },
+    {
+      "artifact_id": "COREAPP-CONFIG-LOADER-IMPL",
+      "description": "Configuration Loader Implementation",
+      "path_relative_to_project_dir": "framework_core/config_loader.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-14T08:15:00Z",
+      "tags": ["implementation", "core-app", "framework-v2", "phase2", "config-loader"]
+    },
+    {
+      "artifact_id": "COREAPP-ERROR-HANDLER-IMPL",
+      "description": "Error Handler Implementation",
+      "path_relative_to_project_dir": "framework_core/error_handler.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-14T08:10:00Z",
+      "tags": ["implementation", "core-app", "framework-v2", "phase2", "error-handler"]
+    },
+    {
+      "artifact_id": "COREAPP-RUN-FRAMEWORK-SCRIPT",
+      "description": "Main Entry Point Script",
+      "path_relative_to_project_dir": "run_framework.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-14T09:20:00Z",
+      "tags": ["implementation", "core-app", "framework-v2", "phase2", "entry-point"]
+    },
+    {
+      "artifact_id": "COREAPP-MESSAGE-MANAGER-TESTS",
+      "description": "Message Manager Unit Tests",
+      "path_relative_to_project_dir": "tests/unit/framework_core/test_message_manager.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-14T08:35:00Z",
+      "tags": ["testing", "unit-tests", "core-app", "framework-v2", "message-manager"]
+    },
+    {
+      "artifact_id": "COREAPP-TOOL-REQUEST-HANDLER-TESTS",
+      "description": "Tool Request Handler Unit Tests",
+      "path_relative_to_project_dir": "tests/unit/framework_core/test_tool_request_handler.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-14T08:50:00Z",
+      "tags": ["testing", "unit-tests", "core-app", "framework-v2", "tool-request-handler"]
+    },
+    {
+      "artifact_id": "COREAPP-UI-MANAGER-TESTS",
+      "description": "UI Manager Unit Tests",
+      "path_relative_to_project_dir": "tests/unit/framework_core/test_ui_manager.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-14T09:05:00Z",
+      "tags": ["testing", "unit-tests", "core-app", "framework-v2", "ui-manager"]
+    },
+    {
+      "artifact_id": "COREAPP-MAIN-LOOP-INTEGRATION-TESTS",
+      "description": "Main Loop Integration Tests",
+      "path_relative_to_project_dir": "tests/integration/test_main_loop.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-14T09:25:00Z",
+      "tags": ["testing", "integration-test", "core-app", "framework-v2", "main-loop"]
+    },
+    {
+      "artifact_id": "COREAPP-CONFIG-YAML-EXAMPLE",
+      "description": "Example Configuration File",
+      "path_relative_to_project_dir": "config/config.yaml.example",
+      "version": "2.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-14T18:00:00Z",
+      "tags": ["configuration", "core-app", "framework-v2", "example"]
+    },
+    {
+      "artifact_id": "COREAPP-SYSTEM-PROMPT-EXAMPLE",
+      "description": "Example System Prompt",
+      "path_relative_to_project_dir": "system/main_prompt.md.example",
+      "version": "2.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-14T18:05:00Z",
+      "tags": ["prompt", "core-app", "framework-v2", "example"]
+    },
+    {
+      "artifact_id": "COREAPP-README-UPDATE",
+      "description": "Updated README.md with Phase 2 Documentation",
+      "path_relative_to_project_dir": "README.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-14T09:40:00Z",
+      "tags": ["documentation", "core-app", "framework-v2", "readme"]
+    },
+    {
+      "artifact_id": "COREAPP-STEP5-SUMMARY",
+      "description": "Step 5 Completion Summary for Framework Core Application Implementation",
+      "path_relative_to_project_dir": "docs/coreapp_step5_completion_summary.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-14T09:45:00Z",
+      "tags": ["summary", "core-app", "framework-v2", "milestone", "phase2-implementation"]
+    },
+    {
+      "artifact_id": "COREAPP-INTEGRATION-TEST-PLAN",
+      "description": "Framework Core Application Integration Test Plan",
+      "path_relative_to_project_dir": "docs/coreapp_integration_test_plan.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-14T10:00:00Z",
+      "tags": ["testing", "integration-test", "core-app", "framework-v2", "test-plan"]
+    },
+    {
+      "artifact_id": "COREAPP-END-TO-END-TESTS",
+      "description": "Framework End-to-End Integration Tests",
+      "path_relative_to_project_dir": "tests/integration/test_framework_end_to_end.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-14T10:15:00Z",
+      "tags": ["testing", "integration-test", "core-app", "framework-v2", "end-to-end"]
+    },
+    {
+      "artifact_id": "COREAPP-DCM-LIAL-TEPS-CHAIN-TESTS",
+      "description": "DCM-LIAL-TEPS Chain Integration Tests",
+      "path_relative_to_project_dir": "tests/integration/test_dcm_lial_teps_chain.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-14T10:25:00Z",
+      "tags": ["testing", "integration-test", "core-app", "framework-v2", "component-chain"]
+    },
+    {
+      "artifact_id": "COREAPP-MESSAGE-MANAGER-INTEGRATION-TESTS",
+      "description": "Message Manager Integration Tests",
+      "path_relative_to_project_dir": "tests/integration/test_message_manager_integration.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-14T16:30:00Z",
+      "tags": ["testing", "integration-test", "core-app", "framework-v2", "message-manager"]
+    },
+    {
+      "artifact_id": "COREAPP-UI-MANAGER-INTEGRATION-TESTS",
+      "description": "UI Manager Integration Tests",
+      "path_relative_to_project_dir": "tests/integration/test_ui_manager_integration.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-14T16:45:00Z",
+      "tags": ["testing", "integration-test", "core-app", "framework-v2", "ui-manager"]
+    },
+    {
+      "artifact_id": "COREAPP-ERROR-HANDLING-INTEGRATION-TESTS",
+      "description": "Error Handling Integration Tests",
+      "path_relative_to_project_dir": "tests/integration/test_error_handling_integration.py",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Forge",
+      "last_modified_timestamp_utc": "2025-05-14T17:00:00Z",
+      "tags": ["testing", "integration-test", "core-app", "framework-v2", "error-handling"]
+    },
+    {
+      "artifact_id": "COREAPP-INT-TEST-COVERAGE-ANALYSIS",
+      "description": "Integration Test Coverage Analysis",
+      "path_relative_to_project_dir": "docs/integration_test_coverage_analysis.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-14T17:15:00Z",
+      "tags": ["testing", "integration-test", "core-app", "framework-v2", "test-coverage"]
+    },
+    {
+      "artifact_id": "COREAPP-STEP6-SUMMARY",
+      "description": "Step 6 Completion Summary for Framework Core Application Integration Testing",
+      "path_relative_to_project_dir": "docs/coreapp_step6_completion_summary.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-14T17:30:00Z",
+      "tags": ["summary", "integration-test", "core-app", "framework-v2", "milestone"]
+    },
+    {
+      "artifact_id": "COREAPP-API-REFERENCE",
+      "description": "API Reference Documentation",
+      "path_relative_to_project_dir": "docs/api_reference.md",
+      "version": "2.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-14T17:45:00Z",
+      "tags": ["documentation", "api", "core-app", "framework-v2", "reference"]
+    },
+    {
+      "artifact_id": "COREAPP-DEVELOPER-GUIDE",
+      "description": "Developer Guide",
+      "path_relative_to_project_dir": "docs/DEVELOPER_GUIDE_V2.md",
+      "version": "2.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-14T18:00:00Z",
+      "tags": ["documentation", "developer", "core-app", "framework-v2", "guide"]
+    },
+    {
+      "artifact_id": "COREAPP-USER-GUIDE",
+      "description": "User Guide",
+      "path_relative_to_project_dir": "docs/USER_GUIDE.md",
+      "version": "2.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-14T18:10:00Z",
+      "tags": ["documentation", "user", "core-app", "framework-v2", "guide"]
+    },
+    {
+      "artifact_id": "COREAPP-CONTEXT-DEFINITION-EXAMPLE",
+      "description": "Example Context Definition File",
+      "path_relative_to_project_dir": "config/FRAMEWORK_CONTEXT.md.example",
+      "version": "2.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-14T18:15:00Z",
+      "tags": ["configuration", "dcm", "framework-v2", "example"]
+    },
+    {
+      "artifact_id": "COREAPP-RELEASE-PACKAGE",
+      "description": "Framework Release Package",
+      "path_relative_to_project_dir": "dist/",
+      "version": "2.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-14T18:20:00Z",
+      "tags": ["release", "framework-v2", "package", "distribution"]
+    },
+    {
+      "artifact_id": "COREAPP-STEP7-SUMMARY",
+      "description": "Step 7 Completion Summary for Framework Core Application Documentation and Finalization",
+      "path_relative_to_project_dir": "docs/coreapp_step7_completion_summary.md",
+      "version": "1.0.0",
+      "last_modified_by_persona": "Catalyst",
+      "last_modified_timestamp_utc": "2025-05-14T18:30:00Z",
+      "tags": ["summary", "documentation", "core-app", "framework-v2", "milestone"]
+    }
+  ]
+}

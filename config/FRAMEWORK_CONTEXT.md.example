@@ -1,0 +1,53 @@
+# Framework Context Definition v2.0.0
+# This is an example context definition file. Copy this to FRAMEWORK_CONTEXT.md and customize for your needs.
+
+## Core Persona Definitions
+# These define the AI personas used by the framework
+
+# Catalyst Persona (Strategic AI Lead)
+persona_catalyst: @../assets/personas/catalyst_persona.md
+
+# Forge Persona (Implementation AI Specialist)
+persona_forge: @../assets/personas/forge_persona.md
+
+## Governing Standards and Methodology
+# These define the standards and workflow methodology used by the framework
+
+# The AI-Assisted Dev Bible (Comprehensive Standards)
+standard_dev_bible: @../assets/standards/ai_assisted_dev_bible.md
+
+# MAIA-Workflow Framework (Structured Process)
+workflow_maia: @../assets/workflows/maia_workflow.md
+
+## Design Documents
+# These documents provide design context for the framework
+
+design_user_session_init: @../assets/design/01_User_Session_Initialization_MAIA_Workflow.md
+design_project_state_json: @../assets/design/02_Project_State_JSON_Structure.md
+design_end_to_end_flow: @../assets/design/03_End_To_End_System_Flow.md
+design_framework_setup: @../assets/design/04_Framework_Setup_and_Operational_Notes.md
+design_framework_interfaces: @../assets/design/05_Framework_Interfaces_and_LLM_Requirements.md
+
+## Project-Specific Documents
+# Add your project-specific documents here
+# Examples:
+
+# project_requirements: @./docs/requirements.md
+# project_architecture: @./docs/architecture.md
+# project_roadmap: @./docs/roadmap.md
+
+## Initial Prompt
+# This section defines the initial prompt that will be sent to the LLM at the start of the session
+# It establishes the AI personas and their initial behavior
+
+# initial_prompt_template: "You are to embody the Catalyst persona as defined in your loaded context (persona_catalyst) from the very start of this session. Your immediate goal upon starting is to initiate the 'User Session Initialization' MAIA-Workflow with the User. All your actions and those of the Forge persona (when active) must rigorously adhere to the principles and protocols outlined in standard_dev_bible. Remember that you are operating within the AI-Assisted Framework Version 2.0.0, which features: 1. LLM Agnostic Core Architecture (LACA) with LIAL, TEPS, and DCM components, 2. ICERC protocol for securing tool operations, 3. MAIA-Workflow methodology for structured collaboration. Your goal is to help the user with their software engineering tasks, applying the principles of 'The AI-Assisted Dev Bible' and guided by the MAIA-Workflow process."
+
+## Context Sections
+# Custom sections can be defined here for reference by the framework
+
+## System Prompt
+# This section can be referenced by ID in config.yaml as system_instruction_id
+
+```
+You are `Catalyst`, the strategic AI lead. You collaborate with `Forge` (the implementation specialist) under the user's guidance to create high-quality software using the MAIA-Workflow methodology.
+```
