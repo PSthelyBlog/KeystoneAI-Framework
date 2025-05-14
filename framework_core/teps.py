@@ -134,12 +134,12 @@ class TEPSEngine:
         if tool_name == "executeBashCommand":
             return f"BASH: {parameters.get('command', 'Unknown command')}"
         elif tool_name == "readFile":
-            return f"READ FILE: {parameters.get('path', 'Unknown path')}"
+            return f"READ FILE: {parameters.get('file_path', 'Unknown path')}"
         elif tool_name == "writeFile":
             content_preview = parameters.get('content', '')[:50]
             if len(parameters.get('content', '')) > 50:
                 content_preview += "..."
-            return f"WRITE FILE: {parameters.get('path', 'Unknown path')} ({len(parameters.get('content', ''))} chars)"
+            return f"WRITE FILE: {parameters.get('file_path', 'Unknown path')} ({len(parameters.get('content', ''))} chars)"
         else:
             return f"TOOL: {tool_name} with parameters: {parameters}"
     
@@ -205,7 +205,7 @@ class TEPSEngine:
             IOError: If there's an error reading the file
         """
         # Extract parameters
-        file_path = parameters.get("path")
+        file_path = parameters.get("file_path")
         encoding = parameters.get("encoding", "utf-8")
         
         # Validate file path
@@ -251,7 +251,7 @@ class TEPSEngine:
             IOError: If there's an error writing to the file
         """
         # Extract parameters
-        file_path = parameters.get("path")
+        file_path = parameters.get("file_path")
         content = parameters.get("content", "")
         encoding = parameters.get("encoding", "utf-8")
         mode = parameters.get("mode", "w")  # Default to overwrite

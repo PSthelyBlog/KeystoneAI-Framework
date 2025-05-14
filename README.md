@@ -80,6 +80,7 @@ The easiest way to get started is by using the included `example-project`.
     Open `my-first-keystone-project/config/config.yaml`.
     *   The `llm.gemini.model` is likely pre-set to a generally accessible model like `gemini-2.5-flash-preview-04-17`. You can change this to `gemini-1.5-pro-latest` if you have access and an appropriate quota/billing setup.
     *   Verify that `dcm.context_definition_path` points correctly to `./config/FRAMEWORK_CONTEXT.md` (relative to where you'll run the script).
+    *   **Note:** The `dcm.context_definition_path` in `config.yaml` should be set relative to the `config.yaml` file itself (e.g., `"./FRAMEWORK_CONTEXT.md"` if `FRAMEWORK_CONTEXT.md` is in the same directory as `config.yaml`). The example project is set up this way.
 
 3.  **Run the Framework:**
     From within your new project directory (e.g., `my-first-keystone-project`):

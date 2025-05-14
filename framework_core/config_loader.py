@@ -80,7 +80,7 @@ class ConfigurationManager:
         return {
             "llm_provider": "gemini", # CHANGED from gemini_2_5_pro
             "api_key_env_var": "GEMINI_API_KEY",
-            "context_definition_file": "./config/FRAMEWORK_CONTEXT.md",
+            "context_definition_file": "./FRAMEWORK_CONTEXT.md",
             
             "llm_settings": {
                 "gemini": { # CHANGED from gemini_2_5_pro
@@ -168,11 +168,16 @@ class ConfigurationManager:
         if not llm_provider:
             raise ConfigError("LLM provider ('llm_provider') is required in configuration.")
             
-        # Ensure provider settings exist
-        llm_settings = self.config.get("llm_settings", {})
-        if llm_provider not in llm_settings:
-            raise ConfigError(f"Settings for LLM provider '{llm_provider}' not found in 'llm_settings'.")
-            
+        # Check if 'llm_settings' exists and if the specific provider is a key within it
+        if "llm_settings" not in self.config or llm_provider not in self.config["llm_settings"]:
+            # It's possible that llm_settings for the provider are all defaults or not needed by adapter
+            self.logger.warning(f"Settings for LLM provider '{llm_provider}' not explicitly found in 'llm_settings'. Adapter will use defaults if any.")
+            # Ensure the structure exists to avoid KeyErrors later
+            if "llm_settings" not in self.config:
+                self.config["llm_settings"] = {}
+            if llm_provider not in self.config["llm_settings"]:
+               self.config["llm_settings"][llm_provider] = {}
+
         # Validate context definition file
         context_file = self.config.get("context_definition_file")
         if not context_file:
@@ -185,11 +190,15 @@ class ConfigurationManager:
         Returns:
             Context definition file path
         """
-        path = self.config.get("context_definition_file")
-        if not path: # Should be caught by _validate_config, but good to be safe
-            raise ConfigError("Context definition file path not configured.")
-        return path
-        
+        path_str = self.config.get("context_definition_file")
+        if not path_str: # Should be caught by _validate_config, but good to be safe
+             raise ConfigError("Context definition file path not configured.")
+        if os.path.isabs(path_str):
+            return path_str
+        # Resolve relative to the config file's directory
+        config_dir = os.path.dirname(os.path.abspath(self.config_path))
+        return os.path.abspath(os.path.join(config_dir, path_str))
+
     def get_llm_provider(self) -> str:
         """
         Get the current LLM provider.
@@ -211,7 +220,8 @@ class ConfigurationManager:
         """
         provider = self.get_llm_provider()
         settings = self.config.get("llm_settings", {}).get(provider)
-        if settings is None: # Check for None explicitly, as empty dict {} is valid
+        # An empty dict {} is valid, means use adapter defaults.
+        if settings is None:
             raise ConfigError(f"Settings for LLM provider '{provider}' not found.")
         return settings
         
