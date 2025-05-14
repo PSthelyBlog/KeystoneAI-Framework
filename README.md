@@ -150,4 +150,4 @@ Contributions are welcome! Please see `docs/DEVELOPER_GUIDE_V2.md` (in the main 
 
 ## License
 
-This project is licensed under the [Specify YOUR LICENSE HERE - e.g., MIT License]. See the `LICENSE` file for details.
+This project is licensed under the MIT License. See the `LICENSE` file for details.
