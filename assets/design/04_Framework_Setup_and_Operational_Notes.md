@@ -1,171 +1,186 @@
-# Framework Setup and Operational Notes: AI-Assisted Framework with Claude Code
+# Framework Setup and Operational Notes: KeystoneAI-Framework with LACA
 
-**Version:** 1.1 (Updated to reflect `start.sh` initialization)
-**Date:** [Current Date - User to fill when saving]
+**Version:** 2.0 (Updated to reflect LLM Agnostic Core Architecture)
+**Date:** 2025-05-16
 **Designed By:** User & Catalyst
 
 ## 1. Introduction
 
-This document provides essential notes for setting up the "AI-Assisted Framework" repository and understanding key operational aspects when using it with the Claude Code command-line interface (`claude` CLI). This framework enables a structured, standards-based approach to AI-assisted development using the `Catalyst` (AI strategist) and `Forge` (AI implementer) personas.
+This document provides essential notes for setting up the "KeystoneAI-Framework" repository and understanding key operational aspects of the LLM Agnostic Core Architecture (LACA). This framework enables a structured, standards-based approach to AI-assisted development using the `Catalyst` (AI strategist) and `Forge` (AI implementer) personas through a flexible architecture that can work with various LLM providers.
 
 ## 2. Prerequisites
 
-1.  **Claude Code CLI Installation:**
-    *   Users **must** have the `claude` CLI tool (provided by Anthropic) installed and configured on their system. This is the primary interface for interacting with the framework.
-    *   Refer to the official Anthropic documentation for instructions on installing and authenticating the `claude` CLI: [https://docs.anthropic.com/en/docs/claude-code/getting-started](https://docs.anthropic.com/en/docs/claude-code/getting-started)
-    *   This framework does **not** install the `claude` CLI itself.
-2.  **Git Installation:**
-    *   Users must have `git` installed to clone the AI-Assisted Framework repository.
-3.  **Bash-compatible Shell:**
-    *   A Bash-compatible shell is required to run the `start.sh` script. This is standard on Linux and macOS. Windows users may use Windows Subsystem for Linux (WSL) or Git Bash.
+1. **Python Environment:**
+   * Users **must** have Python 3.8+ installed on their system.
+   * It's recommended to use a virtual environment for the framework.
+   * Required Python packages are listed in `requirements.txt`.
+2. **Git Installation:**
+   * Users must have `git` installed to clone the KeystoneAI-Framework repository.
+3. **LLM Provider API Key:**
+   * Users must have a valid API key for at least one supported LLM provider (configured in `config.yaml`).
+   * The API key should be stored in an environment variable as specified in your `config.yaml`.
 
 ## 3. Framework Repository Setup
 
-The AI-Assisted Framework is distributed as a Git repository containing foundational documents, design documentation, and configuration for the `claude` CLI.
+The KeystoneAI-Framework is distributed as a Git repository containing the Python application, foundational documents, design documentation, and configuration templates.
 
-1.  **Clone the Repository:**
-    *   Obtain the URL for the AI-Assisted Framework Git repository (e.g., `https://github.com/PSthelyBlog/ai_assisted_framework_claude.git`).
-    *   Clone the repository to your local system:
-        ```bash
-        git clone https://github.com/PSthelyBlog/ai_assisted_framework_claude.git
-        cd ai_assisted_framework_claude
-        ```
+1. **Clone the Repository:**
+   * Obtain the URL for the KeystoneAI-Framework Git repository.
+   * Clone the repository to your local system:
+     ```bash
+     git clone [repository-url] KeystoneAI-Framework
+     cd KeystoneAI-Framework
+     ```
 
-2.  **Directory Structure and Foundational Documents:**
-    *   The cloned repository should have the following structure:
-        ```
-        ai_assisted_framework_claude/
-        ├── CLAUDE.md                 # Primary Claude Code memory file (loads context)
-        ├── README.md                 # User guide, prerequisites, setup
-        ├── start.sh                  # Script to launch the framework with initial prompt
-        ├── personas/
-        │   ├── catalyst_persona.md   # Defines the Catalyst persona
-        │   └── forge_persona.md      # Defines the Forge persona
-        ├── standards/
-        │   └── ai_assisted_dev_bible.md # The AI-Assisted Dev Bible
-        ├── workflows/
-        │   └── maia_workflow.md      # The MAIA-Workflow framework definition
-        └── design/                     # Design artifacts (also loaded by CLAUDE.md)
-            ├── 01_User_Session_Initialization_MAIA_Workflow.md
-            ├── 02_Project_State_JSON_Structure.md
-            ├── 03_End_To_End_System_Flow.md
-            ├── 04_Framework_Setup_and_Operational_Notes.md (This file)
-            └── 05_Claude_Code_Assumptions.md
-        ```
-    *   Ensure paths in `CLAUDE.md`'s `@import` statements correctly reference these files.
+2. **Directory Structure and Framework Components:**
+   * The cloned repository should have the following structure:
+     ```
+     KeystoneAI-Framework/
+     ├── README.md                     # User guide, prerequisites, setup
+     ├── requirements.txt              # Python dependencies
+     ├── run_framework.py              # Main entry point
+     ├── setup.py                      # Installation script
+     ├── config/
+     │   ├── FRAMEWORK_CONTEXT.md.example  # Template for context definition
+     │   └── config.yaml.example       # Template for configuration
+     ├── framework_core/               # Core LACA implementation
+     │   ├── __init__.py
+     │   ├── controller.py             # FrameworkController
+     │   ├── dcm.py                    # Dynamic Context Manager
+     │   ├── lial_core.py              # LLM Interaction Abstraction Layer
+     │   ├── teps.py                   # Tool Execution & Permission Service
+     │   ├── adapters/                 # LLM provider-specific adapters
+     │   │   ├── __init__.py
+     │   │   └── gemini_adapter.py     # Example provider adapter
+     │   └── ...
+     ├── assets/
+     │   ├── personas/
+     │   │   ├── catalyst_persona.md   # Defines the Catalyst persona
+     │   │   └── forge_persona.md      # Defines the Forge persona
+     │   ├── standards/
+     │   │   └── ai_assisted_dev_bible.md # The AI-Assisted Dev Bible
+     │   ├── workflows/
+     │   │   └── maia_workflow.md      # The MAIA-Workflow framework definition
+     │   └── design/                   # Design artifacts
+     │       ├── 01_User_Session_Initialization_MAIA_Workflow.md
+     │       ├── 02_Project_State_JSON_Structure.md
+     │       ├── 03_End_To_End_System_Flow.md
+     │       ├── 04_Framework_Setup_and_Operational_Notes.md (This file)
+     │       └── 05_Framework_Interfaces_and_LLM_Requirements.md
+     └── example-project/              # Template project for users to copy
+         ├── config/
+         │   ├── FRAMEWORK_CONTEXT.md
+         │   └── config.yaml
+         └── assets/
+             └── ...
+     ```
+   * The `framework_core/` directory contains the Python implementation of the LACA architecture.
+   * The `assets/` directory contains foundational documents referenced by the framework.
 
-3.  **Primary `CLAUDE.md` Configuration (Context Loading):**
-    *   The `CLAUDE.md` file in the root of the `ai_assisted_framework_claude` directory is used by the `claude` CLI to load extensive context into Claude's memory.
-    *   It should contain `@import` statements for all foundational documents (personas, standards, workflows) and the design documents.
-    *   **Example `CLAUDE.md` content (illustrative, verify against actual file):**
-        ```markdown
-        # AI-Assisted Framework Context Load
-        
-        ## Core Persona Definitions
-        - Catalyst Persona (Strategic AI Lead): @./personas/catalyst_persona.md
-        - Forge Persona (Implementation AI Specialist): @./personas/forge_persona.md
-        
-        ## Governing Standards and Workflow Methodology
-        - The AI-Assisted Dev Bible (Comprehensive Standards): @./standards/ai_assisted_dev_bible.md
-        - MAIA-Workflow Framework (Structured Process): @./workflows/maia_workflow.md
+3. **Configuring the Framework:**
+   * **Create a Configuration File:**
+     * Copy `config/config.yaml.example` to a location of your choice, for example:
+       ```bash
+       cp config/config.yaml.example my-project-config.yaml
+       ```
+     * Edit the configuration file to include your LLM provider settings, API key environment variable name, and other preferences.
+   * **Create a Framework Context Definition:**
+     * Copy `config/FRAMEWORK_CONTEXT.md.example` to a location of your choice, for example:
+       ```bash
+       cp config/FRAMEWORK_CONTEXT.md.example my-project-context.md
+       ```
+     * Edit this file to reference the foundational documents and set up the initial prompting for the LLM.
 
-        ## Design Documents (For Framework Self-Awareness)
-        - User Session Initialization Workflow: @./design/01_User_Session_Initialization_MAIA_Workflow.md
-        - Project State JSON Structure: @./design/02_Project_State_JSON_Structure.md
-        - End-to-End System Flow: @./design/03_End_To_End_System_Flow.md
-        - Framework Setup and Operational Notes: @./design/04_Framework_Setup_and_Operational_Notes.md
-        - Claude Code Assumptions: @./design/05_Claude_Code_Assumptions.md
-        ```
-    *   **Note:** The `CLAUDE.md` file itself no longer needs to contain the "Initial Operating Instruction for Claude," as this is now handled by `start.sh`.
+4. **Installing Dependencies:**
+   * Set up a Python virtual environment (recommended):
+     ```bash
+     python -m venv venv
+     source venv/bin/activate  # On Windows: venv\Scripts\activate
+     ```
+   * Install dependencies:
+     ```bash
+     pip install -r requirements.txt
+     ```
 
-4.  **`start.sh` Script (Initial Prompting & Launch):**
-    *   The `start.sh` script is responsible for launching the `claude` CLI and providing it with the crucial initial behavioral prompt.
-    *   Ensure `start.sh` is executable (`chmod +x start.sh`).
-    *   **Conceptual content of `start.sh`:**
-        ```bash
-        #!/bin/bash
-        
-        # This script launches the AI-Assisted Framework using the Claude Code CLI.
-        # It provides the essential initial prompt to instruct Claude on its starting persona and task.
-        
-        INITIAL_PROMPT="You are to embody the \`Catalyst\` persona as defined in your loaded context (catalyst_persona.md) from the very start of this session. Your immediate goal upon starting is to initiate the 'User Session Initialization' MAIA-Workflow with the User (the definition of which is available to you via your loaded context for 01_User_Session_Initialization_MAIA_Workflow.md). All your actions and those of the \`Forge\` persona (when active) must rigorously adhere to the principles and protocols outlined in The AI-Assisted Dev Bible."
-        
-        # Launch claude with the initial prompt.
-        # The exact mechanism for passing an initial prompt depends on the claude CLI's capabilities.
-        # Example: Assuming claude can take a prompt via an argument:
-        # claude --initial-prompt "$INITIAL_PROMPT"
-        
-        # Example: Or if it reads from stdin for an initial prompt:
-        # echo "$INITIAL_PROMPT" | claude --read-prompt-from-stdin
-        
-        # Replace the line below with the actual command supported by your 'claude' CLI version
-        # for passing an initial prompt. If no direct way, the script might just run 'claude'
-        # and the user might need to paste the initial prompt manually (less ideal).
-        claude <<EOF
-        $INITIAL_PROMPT
-        EOF
-        # The above here-document approach is one way to pipe multi-line input if claude accepts it.
-        # Test thoroughly to find the most reliable method for your claude CLI version.
-        ```
-    *   **Action Required:** The user/developer must ensure the `claude` command within `start.sh` correctly passes the `INITIAL_PROMPT` to the CLI. The example uses a here-document, but other methods like `--initial-prompt "..."` or piping might be appropriate depending on the `claude` CLI's features. This needs to be verified.
-
-5.  **No `npm install` Required for the Framework:**
-    *   The framework itself does not have Node.js dependencies requiring `npm install`.
+5. **Optional: Creating a Wrapper Script**
+   * You may create a simple wrapper script (`start_framework.sh` or similar) to simplify launching the framework:
+     ```bash
+     #!/bin/bash
+     
+     # Configure environment variables for your LLM provider
+     export GEMINI_API_KEY=your_api_key
+     # or export ANTHROPIC_API_KEY=your_api_key
+     # or export OPENAI_API_KEY=your_api_key
+     
+     # Run the framework with your config
+     python run_framework.py --config my-project-config.yaml
+     ```
+   * Make the script executable: `chmod +x start_framework.sh`
 
 ## 4. Running the Framework
 
-1.  **Navigate to the Framework Directory:**
-    *   Open your terminal and `cd` into the root of the cloned `ai_assisted_framework_claude` directory.
-        ```bash
-        cd path/to/ai_assisted_framework_claude
-        ```
-2.  **Ensure `start.sh` is Executable (One-time):**
-    ```bash
-    chmod +x start.sh
-    ```
-3.  **Execute the `start.sh` Script:**
-    ```bash
-    ./start.sh
-    ```
-4.  **Session Initialization:**
-    *   The `start.sh` script launches `claude`.
-    *   The `claude` CLI loads context from `CLAUDE.md` and its imports.
-    *   The `start.sh` script provides the initial prompt.
-    *   Claude will start as `(Catalyst)` and initiate the "User Session Initialization" MAIA-Workflow.
+1. **Set Environment Variables:**
+   * Set the environment variable for your LLM provider API key as specified in your config file, for example:
+     ```bash
+     export GEMINI_API_KEY=your_api_key
+     ```
+
+2. **Run the Framework:**
+   * Execute the main framework script with your configuration:
+     ```bash
+     python run_framework.py --config path/to/your/config.yaml
+     ```
+   * Or use your wrapper script if you created one:
+     ```bash
+     ./start_framework.sh
+     ```
+
+3. **Session Initialization:**
+   * The `FrameworkController` initializes core components:
+     * `DCM` loads content from `FRAMEWORK_CONTEXT.md` and its referenced documents.
+     * `LIAL` is initialized with the configured LLM provider adapter.
+     * `TEPS` is initialized to handle tool requests and their permissions.
+   * The LLM (through LIAL) receives the initial context and embodies the `Catalyst` persona.
+   * The LLM (as `Catalyst`) initiates the "User Session Initialization" MAIA-Workflow.
 
 ## 5. Key Operational Notes
 
-(This section remains largely the same as previously defined, emphasizing ICERC, project directory, persona switching, version control, and Claude Code's memory system. No changes are needed here based on the `start.sh` modification, as those principles apply once the session is running.)
+1. **ICERC Protocol Implementation:**
+   * The AI-Assisted Dev Bible (Section 2) mandates the "AI System Operation Confirmation Protocol." The `Forge` persona implements this via the **ICERC** (Intent, Command, Expected Outcome, Risk Assessment, Confirmation Request) protocol.
+   * **Crucial Interaction Flow:** When `Forge` (as the LLM) needs to execute a system command (bash) or perform a file modification (write/edit):
+     1. `(Forge)` will create a ToolRequest with the appropriate tool (e.g., `executeBashCommand`, `writeFile`) and include a full ICERC pre-brief in its request:
+        * Stating its **Intent**.
+        * Showing the exact **Command(s)**.
+        * Describing the **Expected Outcome**.
+        * Providing a **Risk Assessment**.
+     2. This ToolRequest is sent via LIAL to the FrameworkController, which passes it to TEPS.
+     3. TEPS displays the ICERC pre-brief to the User and asks for [Y/N] confirmation.
+     4. The User makes their decision based on the detailed ICERC explanation.
+     5. If confirmed, TEPS executes the requested operation and returns the result to the LLM via FrameworkController and LIAL.
+   * The "Dry-Run" option for ICERC is managed conversationally by `Forge`. If a User desires a dry run after seeing the ICERC pre-brief, they should decline TEPS's execution prompt and then explicitly ask `Forge` to describe or simulate a dry run.
 
-1.  **ICERC Protocol Implementation by `Forge`:**
-    *   The AI-Assisted Dev Bible (Section 2) mandates the "AI System Operation Confirmation Protocol." The `Forge` persona implements this via the **ICERC** (Intent, Command, Expected Outcome, Risk Assessment, Confirmation Request) protocol.
-    *   **Crucial Interaction Flow:** When `Forge` (as Claude) needs to execute a system command (bash) or perform a file modification (write/edit):
-        1.  `(Forge)` will first **conversationally output** the full ICERC pre-brief:
-            *   Stating its **Intent**.
-            *   Showing the exact **Command(s)**.
-            *   Describing the **Expected Outcome**.
-            *   Providing a **Risk Assessment**.
-        2.  Only *after* `Forge` has provided this textual ICERC pre-brief will it signal to the underlying Claude Code mechanism to attempt the action.
-        3.  Claude Code's native permission system will then display its own prompt (typically showing the command again) and ask the User for "Yes" / "No" approval.
-        4.  The User makes their decision based on both `Forge`'s detailed ICERC explanation and Claude Code's direct command prompt.
-    *   The "Dry-Run" option for ICERC is managed conversationally by `Forge`. If a User desires a dry run after seeing the ICERC pre-brief, they should decline Claude Code's execution prompt and then explicitly ask `Forge` to describe or simulate a dry run.
+2. **Project Directory and `maia_project_state.json`:**
+   * During the "User Session Initialization" MAIA-Workflow, a specific `Project_Directory_Path` will be established.
+   * All project-specific artifacts (RFIs, code, `Forge`'s reports, etc.) will be stored within this directory.
+   * Session state (including the status of active MAIA-Workflows) is saved to a `maia_project_state.json` file in the root of this `Project_Directory_Path`. This file is managed by `Catalyst` (directing `Forge` for writes via TEPS).
+   * The `FrameworkController` manages the current working directory of the Python process through TEPS (using `os.chdir`).
 
-2.  **Project Directory and `maia_project_state.json`:**
-    *   During the "User Session Initialization" MAIA-Workflow, a specific `Project_Directory_Path` will be established.
-    *   All project-specific artifacts (RFIs, code, `Forge`'s reports, etc.) will be stored within this directory.
-    *   Session state (including the status of active MAIA-Workflows) is saved to a `maia_project_state.json` file in the root of this `Project_Directory_Path`. This file is managed by `Catalyst` (directing `Forge` for writes via ICERC).
+3. **Persona Switching:**
+   * Persona switches between `(Catalyst)` and `(Forge)` are explicitly proposed by the currently active LLM persona and require User confirmation [Y/N] before the switch occurs.
+   * The `FrameworkController` manages the active persona, updating the internal state and informing LIAL of the change for subsequent LLM interactions.
+   * All LLM responses are prefixed with `(Catalyst)` or `(Forge)` for clarity.
 
-3.  **Persona Switching:**
-    *   Persona switches between `(Catalyst)` and `(Forge)` are explicitly proposed by the currently active AI persona and require User confirmation [Y/N] before the switch occurs.
-    *   All AI responses are prefixed with `(Catalyst)` or `(Forge)` for clarity.
+4. **User Responsibility for Version Control:**
+   * The framework facilitates the creation of artifacts in the `Project_Directory_Path`. The User is responsible for initializing and managing version control (e.g., `git`) for this directory.
 
-4.  **User Responsibility for Version Control:**
-    *   The framework facilitates the creation of artifacts in the `Project_Directory_Path`. The User is responsible for initializing and managing version control (e.g., `git`) for this directory.
+5. **Context Management:**
+   * Context is managed by the `DCM` component, which parses `FRAMEWORK_CONTEXT.md` and all referenced documents.
+   * The `FRAMEWORK_CONTEXT.md` file contains references to foundational documents (personas, standards, workflows) and can include an initial prompt template.
+   * The structure of `FRAMEWORK_CONTEXT.md` is:
+     * Markdown-based file.
+     * Section headers: `## Section Name`
+     * Document references: `doc_id: @./path/to/file.md` (paths relative to `FRAMEWORK_CONTEXT.md`).
+     * Special directive for initial prompt: `# initial_prompt_template: "template text"`
+   * Project-specific contexts can be created by having different `FRAMEWORK_CONTEXT.md` files for different projects.
 
-5.  **Claude Code Memory System (`CLAUDE.md`):**
-    *   Users can further customize their experience by using Claude Code's hierarchical `CLAUDE.md` memory system:
-        *   **Project-specific `CLAUDE.md`:** A `CLAUDE.md` within the `Project_Directory_Path` can contain instructions or context specific to that project (e.g., coding standards, API keys for that project). It can even `@import` the main framework's `CLAUDE.md` if desired to ensure framework principles are also loaded.
-        *   **User-global `CLAUDE.md`:** A `~/.claude/CLAUDE.md` can store personal preferences applicable across all projects.
-    *   Refer to Claude Code documentation for details on memory lookup order and best practices.
-
-These notes should provide a solid foundation for setting up and effectively using the AI-Assisted Framework with the Claude Code CLI, incorporating the `start.sh` script for reliable initialization.
+These notes should provide a solid foundation for setting up and effectively using the KeystoneAI-Framework with its LACA architecture.
