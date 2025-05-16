@@ -24,7 +24,7 @@ class TEPSEngine:
     and executing system operations safely.
     """
     
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: Optional[Dict[str, Any]] = None, project_root_path: Optional[str] = None):
         """
         Initialize the TEPS Engine.
         
@@ -32,10 +32,25 @@ class TEPSEngine:
             config: Configuration dictionary with optional settings:
                    - allowlist_file: Path to command allowlist file
                    - dry_run_enabled: Whether to enable dry-run option
+                   - bash: Bash tool configuration with allowed_commands and blocked_commands
+            project_root_path: Root directory path to which file operations will be constrained
         """
         self.config = config or {}
         self.allowlist_enabled = bool(self.config.get("allowlist_file"))
         self.dry_run_enabled = bool(self.config.get("dry_run_enabled", False))
+        
+        # Load command allowlist/blocklist from configuration
+        bash_config = self.config.get("bash", {})
+        self.allowed_bash_commands = bash_config.get("allowed_commands", [])
+        self.blocked_bash_commands = bash_config.get("blocked_commands", [])
+        
+        # Configure project root path for file operation security
+        if project_root_path and isinstance(project_root_path, str) and project_root_path.strip():
+            self.project_root_path = os.path.realpath(os.path.abspath(project_root_path))
+            print(f"TEPS: File operations constrained to project root: {self.project_root_path}")
+        else:
+            self.project_root_path = None
+            print("TEPS: Warning - No project root path configured. File path containment checks will be skipped.")
         
         if self.allowlist_enabled:
             self.allowlist = self._load_allowlist(self.config["allowlist_file"])
@@ -65,6 +80,78 @@ class TEPSEngine:
         tool_name = tool_request.get("tool_name", "unknown_tool")
         parameters = tool_request.get("parameters", {})
         icerc_text = tool_request.get("icerc_full_text", "No ICERC brief provided.")
+        
+        # For bash commands, validate against allowed/blocked lists before ICERC
+        if tool_name == "executeBashCommand":
+            command_string = parameters.get("command", "")
+            if not command_string:
+                return {
+                    "request_id": request_id,
+                    "tool_name": tool_name,
+                    "status": "error",
+                    "data": {
+                        "error_message": "Bash command not specified."
+                    }
+                }
+            
+            # Parse command to get the main executable
+            try:
+                main_command = shlex.split(command_string)[0]
+            except Exception as e:
+                return {
+                    "request_id": request_id,
+                    "tool_name": tool_name,
+                    "status": "error",
+                    "data": {
+                        "error_message": f"Invalid command format: {str(e)}"
+                    }
+                }
+            
+            # Check if command is explicitly blocked
+            if self.blocked_bash_commands and main_command in self.blocked_bash_commands:
+                return {
+                    "request_id": request_id,
+                    "tool_name": tool_name,
+                    "status": "error",
+                    "data": {
+                        "error_message": f"Command '{main_command}' is explicitly blocked by security policy."
+                    }
+                }
+            
+            # Check if command is allowed when allowlist is active
+            if self.allowed_bash_commands and main_command not in self.allowed_bash_commands:
+                return {
+                    "request_id": request_id,
+                    "tool_name": tool_name,
+                    "status": "error",
+                    "data": {
+                        "error_message": f"Command '{main_command}' is not in the allowed commands list."
+                    }
+                }
+        
+        # For file operations, validate path against project root
+        elif tool_name in ["readFile", "writeFile"]:
+            file_path_param = parameters.get("file_path")
+            if not file_path_param:
+                return {
+                    "request_id": request_id,
+                    "tool_name": tool_name,
+                    "status": "error",
+                    "data": {
+                        "error_message": "File path not specified."
+                    }
+                }
+            
+            # Check if path is within project root
+            if not self._is_path_within_project_root(file_path_param):
+                return {
+                    "request_id": request_id,
+                    "tool_name": tool_name,
+                    "status": "error",
+                    "data": {
+                        "error_message": f"Access to path '{file_path_param}' is denied. Operation confined to project directory."
+                    }
+                }
         
         # Display ICERC information to the user
         print("\n=== ICERC PRE-BRIEF ===")
@@ -296,6 +383,37 @@ class TEPSEngine:
         
         with open(allowlist_file, 'r', encoding='utf-8') as f:
             return [line.strip() for line in f.readlines() if line.strip() and not line.startswith('#')]
+
+    def _is_path_within_project_root(self, target_path_str: str) -> bool:
+        """
+        Check if the target path is within the configured project root path.
+        
+        Args:
+            target_path_str: The file path to check
+            
+        Returns:
+            Boolean indicating whether the path is within the project root
+            Returns True if no project root is configured (validation disabled)
+        """
+        # If no project root is configured, all paths are allowed
+        if self.project_root_path is None:
+            print("TEPS: Path validation skipped - no project root configured")
+            return True
+        
+        # Resolve the target path to its absolute, canonical form
+        try:
+            resolved_target_path = os.path.realpath(os.path.abspath(target_path_str))
+            
+            # Check if resolved target path is within project root
+            # os.path.commonpath returns the longest common subpath of given paths
+            # If it equals project_root_path, the target is either the root itself or a subpath
+            return os.path.commonpath([self.project_root_path, resolved_target_path]) == self.project_root_path
+        
+        except (ValueError, TypeError) as e:
+            # ValueError can occur if paths are on different drives in Windows
+            # TypeError can occur if path is not a string
+            print(f"TEPS: Path validation error - {str(e)}")
+            return False
 
 if __name__ == "__main__":
     # Simple test if run directly
