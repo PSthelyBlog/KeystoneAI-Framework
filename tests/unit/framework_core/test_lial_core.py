@@ -1,116 +1,154 @@
 import pytest
-from typing import Dict, List, Optional, Any
+from typing import Dict, Any, Optional, List
+import sys
+import os
+from unittest.mock import MagicMock
 
-from framework_core.lial_core import (
-    LLMAdapterInterface,
-    Message,
-    ToolRequest,
-    LLMResponse,
-    ToolResult
-)
+# Add project root to path to allow imports
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 
-# Define a minimal concrete implementation for testing
-class MockLLMAdapter(LLMAdapterInterface):
-    def __init__(self, config: Dict[str, Any], dcm_instance: Any) -> None:
-        self.config = config
-        self.dcm_instance = dcm_instance
-    
-    def send_message_sequence(
-        self, 
-        messages: List[Message], 
-        active_persona_id: Optional[str] = None
-    ) -> LLMResponse:
-        return {
-            "conversation": "Mock LLM response",
-            "tool_request": None
-        }
+from framework_core.lial_core import Message, ToolRequest, LLMResponse, ToolResult, LLMAdapterInterface
 
-class TestLIALCore:
+
+class TestTypedDicts:
+    """Test cases for the TypedDict structures defined in lial_core.py"""
+
     def test_message_structure(self):
-        # Test creating a valid Message object
+        """Test that Message TypedDict can be created correctly"""
+        # Test with required fields only
         message: Message = {
             "role": "user",
-            "content": "Hello, LLM!"
+            "content": "Hello, world!"
         }
         assert message["role"] == "user"
-        assert message["content"] == "Hello, LLM!"
-        
+        assert message["content"] == "Hello, world!"
+        assert "tool_call_id" not in message
+        assert "tool_name" not in message
+
         # Test with optional fields
-        tool_message: Message = {
+        message_with_tool: Message = {
             "role": "tool_result",
-            "content": "Command executed successfully",
-            "tool_call_id": "cmd-123",
-            "tool_name": "bash"
+            "content": "Tool result here",
+            "tool_call_id": "12345",
+            "tool_name": "test_tool"
         }
-        assert tool_message["tool_call_id"] == "cmd-123"
-        assert tool_message["tool_name"] == "bash"
-    
+        assert message_with_tool["role"] == "tool_result"
+        assert message_with_tool["content"] == "Tool result here"
+        assert message_with_tool["tool_call_id"] == "12345"
+        assert message_with_tool["tool_name"] == "test_tool"
+
+        # Test with various roles
+        for role in ["user", "assistant", "system", "tool_result"]:
+            message = {"role": role, "content": "Test content"}
+            assert message["role"] == role
+
     def test_tool_request_structure(self):
-        # Test creating a valid ToolRequest
-        tool_req: ToolRequest = {
-            "request_id": "req-456",
-            "tool_name": "bash",
-            "parameters": {
-                "command": "ls -la",
-                "working_directory": "/home/user"
-            },
-            "icerc_full_text": "Intent: List files...\nCommand: ls -la\nExpected: Show files\nRisk: Low"
+        """Test that ToolRequest TypedDict can be created correctly"""
+        tool_request: ToolRequest = {
+            "tool_name": "test_tool",
+            "parameters": {"param1": "value1", "param2": "value2"},
+            "request_id": "req-12345",
+            "icerc_full_text": "ICERC Protocol confirmation text here"
         }
         
-        assert tool_req["request_id"] == "req-456"
-        assert tool_req["tool_name"] == "bash"
-        assert tool_req["parameters"]["command"] == "ls -la"
-        assert "icerc_full_text" in tool_req
-    
-    def test_llm_response_structure(self):
-        # Test a response with just conversation
-        response1: LLMResponse = {
-            "conversation": "Hello, I'm an LLM!",
-            "tool_request": None
-        }
-        assert response1["conversation"] == "Hello, I'm an LLM!"
-        assert response1["tool_request"] is None
-        
-        # Test a response with a tool request
-        response2: LLMResponse = {
-            "conversation": "I'll execute that command for you.",
-            "tool_request": {
-                "request_id": "cmd-789",
-                "tool_name": "bash",
-                "parameters": {"command": "echo hello"},
-                "icerc_full_text": "Intent: Echo text...\nCommand: echo hello\nExpected: Print hello\nRisk: Low"
-            }
-        }
-        assert response2["conversation"] == "I'll execute that command for you."
-        assert response2["tool_request"]["tool_name"] == "bash"
-    
+        assert tool_request["tool_name"] == "test_tool"
+        assert tool_request["parameters"] == {"param1": "value1", "param2": "value2"}
+        assert tool_request["request_id"] == "req-12345"
+        assert tool_request["icerc_full_text"] == "ICERC Protocol confirmation text here"
+
     def test_tool_result_structure(self):
-        # Test a successful tool execution result
-        result: ToolResult = {
-            "request_id": "cmd-789",
-            "tool_name": "bash",
-            "status": "success",
-            "data": {
-                "stdout": "hello\n",
-                "stderr": "",
-                "exit_code": 0
-            }
+        """Test that ToolResult TypedDict can be created correctly"""
+        tool_result: ToolResult = {
+            "tool_name": "test_tool",
+            "content": "Result of the tool execution",
+            "tool_call_id": "call-12345"
         }
-        assert result["status"] == "success"
-        assert result["data"]["stdout"] == "hello\n"
-    
-    def test_mock_adapter_implementation(self):
-        # Test that we can create a concrete implementation
-        adapter = MockLLMAdapter(
-            config={"api_key_env_var": "TEST_API_KEY"}, 
-            dcm_instance=None
-        )
         
-        # Test sending messages
-        response = adapter.send_message_sequence(
-            messages=[{"role": "user", "content": "Hello"}]
-        )
+        assert tool_result["tool_name"] == "test_tool"
+        assert tool_result["content"] == "Result of the tool execution"
+        assert tool_result["tool_call_id"] == "call-12345"
+
+    def test_llm_response_structure(self):
+        """Test that LLMResponse TypedDict can be created correctly"""
+        # Test text-only response
+        text_response: LLMResponse = {
+            "text": "This is a text response",
+            "error": None,
+            "tool_requests": None
+        }
         
-        assert isinstance(response, dict)
-        assert "conversation" in response
-        assert response["conversation"] == "Mock LLM response"
+        assert text_response["text"] == "This is a text response"
+        assert text_response["error"] is None
+        assert text_response["tool_requests"] is None
+
+        # Test tool request response
+        tool_request: ToolRequest = {
+            "tool_name": "test_tool",
+            "parameters": {"param1": "value1"},
+            "request_id": "req-12345",
+            "icerc_full_text": "ICERC confirmation"
+        }
+        
+        tool_response: LLMResponse = {
+            "text": None,
+            "error": None,
+            "tool_requests": [tool_request]
+        }
+        
+        assert tool_response["text"] is None
+        assert tool_response["error"] is None
+        assert len(tool_response["tool_requests"]) == 1
+        assert tool_response["tool_requests"][0] == tool_request
+
+        # Test error response
+        error_response: LLMResponse = {
+            "text": None,
+            "error": "API Error occurred",
+            "tool_requests": None
+        }
+        
+        assert error_response["text"] is None
+        assert error_response["error"] == "API Error occurred"
+        assert error_response["tool_requests"] is None
+
+
+class TestLLMAdapterInterface:
+    """Test cases for the LLMAdapterInterface abstract base class"""
+
+    def test_abstract_class_instantiation(self):
+        """Test that LLMAdapterInterface cannot be instantiated directly"""
+        with pytest.raises(TypeError):
+            LLMAdapterInterface({}, None)
+
+    def test_concrete_implementation(self):
+        """Test a concrete implementation of LLMAdapterInterface"""
+        class ConcreteAdapter(LLMAdapterInterface):
+            def __init__(self, config: Dict[str, Any], dcm_instance: Optional[Any] = None):
+                self.config = config
+                self.dcm_instance = dcm_instance
+            
+            def send_message_sequence(self, messages: List[Message], active_persona_id: Optional[str] = None) -> LLMResponse:
+                # Simple implementation for testing
+                return {
+                    "text": "Response from concrete adapter",
+                    "error": None,
+                    "tool_requests": None
+                }
+        
+        # Test instantiation
+        config = {"test_key": "test_value"}
+        dcm_instance = MagicMock()
+        adapter = ConcreteAdapter(config, dcm_instance)
+        
+        assert adapter.config == config
+        assert adapter.dcm_instance == dcm_instance
+        
+        # Test send_message_sequence
+        messages: List[Message] = [
+            {"role": "user", "content": "Hello!"}
+        ]
+        
+        response = adapter.send_message_sequence(messages)
+        assert response["text"] == "Response from concrete adapter"
+        assert response["error"] is None
+        assert response["tool_requests"] is None
