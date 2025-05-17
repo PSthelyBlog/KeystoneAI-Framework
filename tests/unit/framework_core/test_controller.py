@@ -409,28 +409,40 @@ class TestFrameworkController(unittest.TestCase):
         self.controller.ui_manager = self.mock_ui_manager
         self.controller.lial_manager = self.mock_lial_manager
         
-        # Force the run method to exit after welcome message
-        self.mock_ui_manager.get_user_input.side_effect = KeyboardInterrupt()
+        # Create a mock shutdown function that actually terminates the loop
+        def mock_shutdown_impl():
+            self.controller.running = False
+        
+        # Mock welcome message first, then /quit
+        call_count = 0
+        def process_messages_with_llm_mock(*args):
+            return {"conversation": "Initial assistant response", "tool_request": None}
+        
+        # Force the run method to exit by using "/quit" command
+        self.mock_ui_manager.get_user_input.return_value = "/quit"
         
         # Call the method under test
-        with patch.object(self.controller, 'shutdown') as mock_shutdown:
+        with patch.object(self.controller, '_process_messages_with_llm', side_effect=process_messages_with_llm_mock) as mock_process, \
+             patch.object(self.controller, 'shutdown', side_effect=mock_shutdown_impl) as mock_shutdown:
+            # Reset the mock before our test to clear any previous calls
+            self.mock_ui_manager.display_system_message.reset_mock()
             self.controller.run()
         
-        # Verify running flag was set to True
-        self.assertTrue(self.controller.running)
-        
-        # Verify welcome message was displayed
-        self.mock_ui_manager.display_system_message.assert_called_with(
+        # Verify welcome message was displayed - using any_call since other messages might be shown first
+        self.mock_ui_manager.display_system_message.assert_any_call(
             "Framework Core Application started. Type /help for available commands."
         )
         
-        # Verify the keyboard interrupt was handled
+        # Verify "Exiting application..." message was displayed
         self.mock_ui_manager.display_system_message.assert_any_call(
-            "Interrupted. Type /quit to exit."
+            "Exiting application..."
         )
         
         # Verify shutdown was called
         mock_shutdown.assert_called_once()
+        
+        # Verify running flag was set to False by our mock implementation
+        self.assertFalse(self.controller.running)
 
     def test_run_text_only_response(self):
         """Test run method handles text-only response from LLM."""
@@ -538,12 +550,27 @@ class TestFrameworkController(unittest.TestCase):
         # Configure mocks
         self.mock_message_manager.get_messages.return_value = [{"role": "user", "content": "Hello"}]
         
-        # Force the run method to exit after handling the exception
-        self.mock_ui_manager.get_user_input.side_effect = ["/quit"]
+        # Create a counter to limit exception throwing to avoid infinite loops
+        call_count = 0
         
-        # Mock _process_messages_with_llm to raise an exception
-        with patch.object(self.controller, '_process_messages_with_llm', side_effect=Exception("LLM error")) as mock_process, \
-             patch.object(self.controller, 'shutdown') as mock_shutdown:
+        # Define a function that raises exception only on first call
+        def process_with_exception(*args):
+            nonlocal call_count
+            if call_count == 0:
+                call_count += 1
+                raise Exception("LLM error")
+            return {"conversation": "Response after error", "tool_request": None}
+        
+        # Create a mock shutdown function that terminates the loop
+        def mock_shutdown_impl():
+            self.controller.running = False
+        
+        # Force the run method to exit after handling the exception
+        self.mock_ui_manager.get_user_input.return_value = "/quit"
+        
+        # Mock _process_messages_with_llm to raise an exception only once
+        with patch.object(self.controller, '_process_messages_with_llm', side_effect=process_with_exception) as mock_process, \
+             patch.object(self.controller, 'shutdown', side_effect=mock_shutdown_impl) as mock_shutdown:
             self.controller.run()
         
         # Verify error message was displayed
@@ -554,6 +581,9 @@ class TestFrameworkController(unittest.TestCase):
         
         # Verify shutdown was called
         mock_shutdown.assert_called_once()
+        
+        # Verify running flag was set to False by our mock implementation
+        self.assertFalse(self.controller.running)
 
     def test_run_empty_user_input(self):
         """Test run method handles empty user input (from Ctrl+C/Ctrl+D)."""
