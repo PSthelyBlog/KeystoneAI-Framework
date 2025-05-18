@@ -166,6 +166,7 @@ The framework supports several special commands that start with `/`:
 | `/clear` | Clear conversation history |
 | `/system` | Add a system message |
 | `/debug` | Toggle debug mode |
+| `/persona` | Switch active persona (e.g., `/persona forge`, `/persona catalyst`) |
 
 Examples:
 
@@ -178,12 +179,20 @@ Available commands:
 /clear - Clear conversation history
 /system - Add a system message
 /debug - Toggle debug mode
+/persona - Switch active persona (e.g., /persona forge, /persona catalyst)
 
 > /system You are focused on helping with Python development
 Added system message: You are focused on helping with Python development
 
 > /debug
 Debug mode enabled
+
+> /persona
+Current active persona: Catalyst. Usage: /persona <persona_id>
+
+> /persona forge
+Active persona switched to Forge.
+(Forge): I'm now operating as Forge, the expert AI implementer and system operator. How can I assist with implementation or system operations?
 ```
 
 ### Working with Tools
@@ -218,6 +227,7 @@ framework:
   version: "2.0.0"
   log_level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
   log_file: "framework.log"
+  default_persona: "catalyst"  # The default persona to use at startup (e.g., catalyst, forge)
 ```
 
 #### LLM Provider Settings

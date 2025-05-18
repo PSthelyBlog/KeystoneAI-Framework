@@ -32,7 +32,8 @@ class TestFrameworkController(unittest.TestCase):
         self.mock_config_manager.get_teps_settings.return_value = {'tools': []}
         self.mock_config_manager.get_message_history_settings.return_value = {'max_messages': 100}
         self.mock_config_manager.get_ui_settings.return_value = {'prompt_prefix': '> '}
-        self.mock_config_manager.config = {'default_persona': 'forge'}
+        self.mock_config_manager.get_framework_settings.return_value = {'default_persona': 'forge'}
+        self.mock_config_manager.config = {'framework': {'default_persona': 'forge'}}
         
         # Initialize controller with mock config manager
         self.controller = FrameworkController(self.mock_config_manager)
@@ -61,6 +62,7 @@ class TestFrameworkController(unittest.TestCase):
         self.assertIsNone(self.controller.tool_request_handler)
         self.assertFalse(self.controller.running)
         self.assertFalse(self.controller.debug_mode)
+        self.assertIsNone(self.controller.active_persona_id)
 
 
     def test_initialize_success(self):
@@ -326,6 +328,7 @@ class TestFrameworkController(unittest.TestCase):
         # Set up dependencies
         self.controller.dcm_manager = self.mock_dcm_manager
         self.controller.message_manager = self.mock_message_manager
+        self.controller.ui_manager = self.mock_ui_manager
         
         # Configure mock return values
         initial_prompt = "This is the initial prompt"
@@ -339,6 +342,12 @@ class TestFrameworkController(unittest.TestCase):
         
         # Verify add_system_message was called with the initial prompt
         self.mock_message_manager.add_system_message.assert_called_once_with(initial_prompt)
+        
+        # Verify active_persona_id was set correctly
+        self.assertEqual(self.controller.active_persona_id, "forge")
+        
+        # Verify UI prefix was updated
+        self.mock_ui_manager.set_assistant_prefix.assert_called_once_with("(Forge): ")
 
     def test_setup_initial_context_no_dcm(self):
         """Test initial context setup when DCM is not initialized."""
@@ -636,7 +645,9 @@ class TestFrameworkController(unittest.TestCase):
         
         # Configure mocks
         self.mock_lial_manager.send_messages.return_value = llm_response
-        self.mock_config_manager.config = {"default_persona": "forge"}
+        
+        # Set active_persona_id directly for the test
+        self.controller.active_persona_id = "forge"
         
         # Call the method under test
         result = self.controller._process_messages_with_llm(messages)
@@ -1116,6 +1127,79 @@ class TestFrameworkController(unittest.TestCase):
         # Verify ui_manager.display_system_message was called with disabled message
         self.mock_ui_manager.display_system_message.assert_called_once_with("Debug mode disabled.")
 
+    def test_process_special_command_persona_valid(self):
+        """Test processing of /persona command with valid persona."""
+        # Set up dependencies
+        self.controller.ui_manager = self.mock_ui_manager
+        self.controller.dcm_manager = self.mock_dcm_manager
+        self.controller.active_persona_id = "catalyst"
+        
+        # Configure mock to return valid personas
+        self.mock_dcm_manager.get_persona_definitions.return_value = {
+            "persona_catalyst": "Catalyst persona content",
+            "persona_forge": "Forge persona content"
+        }
+        
+        # Call the method under test
+        result = self.controller._process_special_command("/persona forge")
+        
+        # Verify result is True (processed as a special command)
+        self.assertTrue(result)
+        
+        # Verify persona was updated
+        self.assertEqual(self.controller.active_persona_id, "forge")
+        
+        # Verify UI prefix was updated
+        self.mock_ui_manager.set_assistant_prefix.assert_called_once_with("(Forge): ")
+        
+        # Verify success message was displayed
+        self.mock_ui_manager.display_system_message.assert_called_once_with("Active persona switched to Forge.")
+        
+    def test_process_special_command_persona_invalid(self):
+        """Test processing of /persona command with invalid persona."""
+        # Set up dependencies
+        self.controller.ui_manager = self.mock_ui_manager
+        self.controller.dcm_manager = self.mock_dcm_manager
+        self.controller.active_persona_id = "catalyst"
+        
+        # Configure mock to return valid personas
+        self.mock_dcm_manager.get_persona_definitions.return_value = {
+            "persona_catalyst": "Catalyst persona content",
+            "persona_forge": "Forge persona content"
+        }
+        
+        # Call the method under test
+        result = self.controller._process_special_command("/persona invalid")
+        
+        # Verify result is True (processed as a special command)
+        self.assertTrue(result)
+        
+        # Verify persona was not updated
+        self.assertEqual(self.controller.active_persona_id, "catalyst")
+        
+        # Verify error message was displayed
+        self.mock_ui_manager.display_error_message.assert_called_once_with(
+            "Command Error",
+            "Invalid persona ID: invalid. Valid personas: catalyst, forge"
+        )
+        
+    def test_process_special_command_persona_without_argument(self):
+        """Test processing of /persona command without argument."""
+        # Set up dependencies
+        self.controller.ui_manager = self.mock_ui_manager
+        self.controller.active_persona_id = "catalyst"
+        
+        # Call the method under test
+        result = self.controller._process_special_command("/persona")
+        
+        # Verify result is True (processed as a special command)
+        self.assertTrue(result)
+        
+        # Verify display message was shown
+        self.mock_ui_manager.display_system_message.assert_called_once_with(
+            "Current active persona: Catalyst. Usage: /persona <persona_id>"
+        )
+        
     def test_process_special_command_unknown(self):
         """Test processing of unknown special command."""
         # Set up dependencies

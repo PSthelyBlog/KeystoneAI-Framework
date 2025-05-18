@@ -37,7 +37,8 @@ class FrameworkController:
         "/exit": "Exit the application",
         "/clear": "Clear conversation history",
         "/system": "Add a system message",
-        "/debug": "Toggle debug mode"
+        "/debug": "Toggle debug mode",
+        "/persona": "Switch active persona (e.g., /persona forge, /persona catalyst)"
     }
     
     def __init__(self, config_manager: 'ConfigurationManager'):
@@ -58,6 +59,7 @@ class FrameworkController:
         self.error_handler = ErrorHandler()
         self.running = False
         self.debug_mode = False
+        self.active_persona_id = None  # Will be set during _setup_initial_context
         
     def initialize(self) -> bool:
         """
@@ -210,6 +212,21 @@ class FrameworkController:
             if not self.dcm_manager:
                 self.logger.warning("DCM Manager not initialized, cannot setup initial context.")
                 return
+                
+            # Set the default active persona from config or use "catalyst" as fallback
+            framework_settings = self.config_manager.get_framework_settings()
+            default_persona = framework_settings.get("default_persona", "catalyst")
+            self.active_persona_id = default_persona
+            self.logger.info(f"Setting default active persona: {self.active_persona_id}")
+            
+            # Update the UI manager's assistant prefix to reflect the active persona
+            if self.ui_manager:
+                persona_display_name = self.active_persona_id.capitalize()
+                prefix = f"({persona_display_name}): "
+                self.ui_manager.set_assistant_prefix(prefix)
+                self.logger.debug(f"Updated UI assistant prefix to: {prefix}")
+            
+            # Get and add initial prompt to message history
             initial_prompt = self.dcm_manager.get_initial_prompt()
             if initial_prompt:
                 if not self.message_manager:
@@ -305,10 +322,8 @@ class FrameworkController:
             LLMResponse containing conversation and optional tool request
         """
         try:
-            self.logger.debug(f"Sending {len(messages)} messages to LLM")
-            # Assuming active_persona_id might be managed by the controller or config in future
-            active_persona_id = self.config_manager.config.get("default_persona") # Example
-            llm_response = self.lial_manager.send_messages(messages, active_persona_id=active_persona_id)
+            self.logger.debug(f"Sending {len(messages)} messages to LLM using persona: {self.active_persona_id}")
+            llm_response = self.lial_manager.send_messages(messages, active_persona_id=self.active_persona_id)
             
             # Validate and sanitize response
             if not isinstance(llm_response, dict):
@@ -441,6 +456,59 @@ class FrameworkController:
                 # For simplicity, this might require more complex logger management.
                 # Example: logging.getLogger().setLevel(logging.DEBUG if self.debug_mode else logging.INFO)
                 return True
+                
+            elif command == "/persona":
+                # Switch active persona
+                new_persona_id = command_parts[1].strip().lower() if len(command_parts) > 1 else ""
+                
+                if not new_persona_id:
+                    # Display current persona if no parameter provided
+                    current_display = self.active_persona_id.capitalize() if self.active_persona_id else "None"
+                    self.ui_manager.display_system_message(f"Current active persona: {current_display}. Usage: /persona <persona_id>")
+                    return True
+                    
+                # Verify the requested persona exists
+                if not self.dcm_manager:
+                    self.ui_manager.display_error_message("Command Error", "DCM Manager not initialized.")
+                    return True
+                    
+                persona_definitions = self.dcm_manager.get_persona_definitions()
+                valid_persona_ids = [pid.replace("persona_", "") for pid in persona_definitions.keys()]
+                
+                if new_persona_id not in valid_persona_ids:
+                    self.ui_manager.display_error_message(
+                        "Command Error", 
+                        f"Invalid persona ID: {new_persona_id}. Valid personas: {', '.join(valid_persona_ids)}"
+                    )
+                    return True
+                
+                # Update active persona
+                old_persona_id = self.active_persona_id
+                self.active_persona_id = new_persona_id
+                
+                # Reset message history to ensure clean persona switch
+                # FULLY reset the history to ensure a complete switch
+                if self.message_manager:
+                    self.message_manager.clear_history(preserve_system=False)
+                    # Add explicit system messages about the persona
+                    if new_persona_id == "forge":
+                        switch_msg = "You are now Forge, the Expert AI Implementer & System Operator. You must fully embody the Forge persona's technical expertise and practical implementation focus. You are NOT Catalyst. Respond with Forge's implementation-focused, technical mindset."
+                    else: # catalyst
+                        switch_msg = "You are now Catalyst, the Visionary AI Strategist & Architect. You must fully embody the Catalyst persona's strategic thinking and architectural vision. You are NOT Forge. Respond with Catalyst's strategic, high-level mindset."
+                    
+                    self.message_manager.add_system_message(switch_msg)
+                
+                # Update UI prefix
+                if self.ui_manager:
+                    persona_display_name = new_persona_id.capitalize()
+                    prefix = f"({persona_display_name}): "
+                    self.ui_manager.set_assistant_prefix(prefix)
+                
+                # Log the change
+                self.logger.info(f"Active persona switched from {old_persona_id} to {new_persona_id}")
+                self.ui_manager.display_system_message(f"Active persona switched to {new_persona_id.capitalize()}.")
+                return True
+                
             else:
                 self.ui_manager.display_error_message("Command Error", f"Unknown command: {command}")
                 return True # Still processed as a (failed) command

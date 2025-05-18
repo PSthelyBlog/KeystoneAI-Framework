@@ -1,4 +1,5 @@
 import os
+import json
 from typing import Dict, List, Optional, Any, Tuple
 import google.generativeai as genai
 from google.ai import generativelanguage as glm # For schema types
@@ -265,6 +266,10 @@ class GeminiAdapter(LLMAdapterInterface):
         chat_session = current_generative_model.start_chat(history=history_for_chat_start)
 
         try:
+            # Make sure content is never empty to avoid Gemini API errors
+            if isinstance(content_to_send, str) and not content_to_send.strip():
+                content_to_send = "Hello."
+                
             response = chat_session.send_message(content_to_send)
             
             conversation_text = ""

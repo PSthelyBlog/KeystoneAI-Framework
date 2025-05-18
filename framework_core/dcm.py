@@ -95,7 +95,7 @@ class DynamicContextManager:
                         continue
                     
                     # Check for initial prompt template directive
-                    if line.startswith('# initial_prompt_template:'):
+                    if line.startswith('initial_prompt_template:') or line.startswith('# initial_prompt_template:'):
                         try:
                             # Extract the template text which may be in quotes
                             template_text = line.split(':', 1)[1].strip()
@@ -162,7 +162,7 @@ class DynamicContextManager:
                 self._loaded_docs[doc_id] = content
                 
                 # Store persona definitions separately
-                if section.lower() == "personas":
+                if section.lower() == "personas" or section.lower() == "core_persona_definitions":
                     self._persona_definitions[doc_id] = content
                     self.logger.debug(f"Stored persona definition: {doc_id}")
                 

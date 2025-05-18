@@ -872,6 +872,80 @@ def _enhance_with_context(self, messages: List[Dict[str, Any]]) -> List[Dict[str
 
 The Framework Core Application is designed to be extensible and customizable. This section covers how to customize the MessageManager, extend the UI, and implement custom error handling strategies.
 
+### Persona Switching System
+
+Version 2.0.0 introduces a dynamic persona switching system that allows users to switch between different AI personas (e.g., Catalyst, Forge) during a session using the `/persona` command.
+
+#### Architecture
+
+The persona switching system consists of several components:
+
+1. `FrameworkController`: Manages the active persona state and processes the `/persona` command
+2. `UIManager`: Updates the UI to reflect the active persona
+3. `LIALManager`: Passes the active persona ID to the LLM adapter
+4. `ConfigurationManager`: Loads the default persona from configuration
+
+#### Implementation Details
+
+```python
+# In FrameworkController
+class FrameworkController:
+    def __init__(self, config_manager):
+        # ...
+        self.active_persona_id = None  # Will be set during initialization
+        
+    def _setup_initial_context(self):
+        # Set default persona from config
+        framework_settings = self.config_manager.get_framework_settings()
+        default_persona = framework_settings.get("default_persona", "catalyst")
+        self.active_persona_id = default_persona
+        
+        # Update UI prefix
+        if self.ui_manager:
+            persona_display_name = self.active_persona_id.capitalize()
+            prefix = f"({persona_display_name}): "
+            self.ui_manager.set_assistant_prefix(prefix)
+            
+    def _process_special_command(self, user_input):
+        # ...
+        elif command == "/persona":
+            # Switch active persona logic
+            # Validate persona exists in DCM
+            # Update self.active_persona_id
+            # Update UI manager prefix
+            
+    def _process_messages_with_llm(self, messages):
+        # Pass active persona to LIAL
+        return self.lial_manager.send_messages(messages, active_persona_id=self.active_persona_id)
+```
+
+#### Extending the Persona System
+
+To extend the persona system with additional features:
+
+1. **New Personas**: Add new persona documents to your `FRAMEWORK_CONTEXT.md` file
+2. **Custom Persona Logic**: Extend the `FrameworkController` class to implement custom persona selection logic
+3. **Persona-Specific UI**: Extend the `UIManager` to implement more advanced UI changes based on the active persona
+
+```python
+# Example: Adding persona-specific styling to the UI
+class EnhancedUIManager(UserInterfaceManager):
+    def set_assistant_prefix(self, prefix: str) -> None:
+        """Set assistant prefix with persona-specific styling."""
+        self.assistant_prefix = prefix
+        
+        # Extract persona name from prefix (e.g., "(Catalyst): " → "Catalyst")
+        persona_name = prefix.strip("(): ")
+        
+        # Set persona-specific styling
+        if persona_name.lower() == "catalyst":
+            self.assistant_color = self.COLORS["blue"]
+        elif persona_name.lower() == "forge":
+            self.assistant_color = self.COLORS["green"]
+        else:
+            self.assistant_color = self.COLORS["white"]
+```
+
 ### MessageManager Customization
 
 #### Custom Pruning Strategies

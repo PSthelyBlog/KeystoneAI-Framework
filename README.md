@@ -61,39 +61,77 @@ Before you begin, ensure you have the following installed:
     ```
     *(Note: Direct support for `.env` files is not included by default; environment variables are the primary method.)*
 
-## Getting Started: Your First Use (Using the Example Project)
+## Getting Started
 
-The easiest way to get started is by using the included `example-project`.
+The KeystoneAI Framework provides multiple ways to get started, depending on your preferences and project structure.
 
-1.  **Copy the Example Project:**
-    Navigate to a location where you want to create your project and copy the `example-project` folder from the cloned `KeystoneAI-Framework` repository.
-    ```bash
-    # Example: If KeystoneAI-Framework is in ~/KeystoneAI-Framework
-    # and you want your project in ~/my-projects/
-    mkdir -p ~/my-projects
-    cp -r ~/KeystoneAI-Framework/example-project ~/my-projects/my-first-keystone-project
-    cd ~/my-projects/my-first-keystone-project
-    ```
-    This `my-first-keystone-project` directory now contains a pre-configured `config` and `assets` structure.
+### Method 1: Using the Utility Scripts (Recommended)
 
-2.  **Review Configuration (Optional, but Recommended):**
-    Open `my-first-keystone-project/config/config.yaml`.
-    *   The `llm.gemini.model` is likely pre-set to a generally accessible model like `gemini-2.5-flash-preview-04-17`. You can change this to `gemini-1.5-pro-latest` if you have access and an appropriate quota/billing setup.
-    *   Verify that `dcm.context_definition_path` points correctly to `./config/FRAMEWORK_CONTEXT.md` (relative to where you'll run the script).
-    *   **Note:** The `dcm.context_definition_path` in `config.yaml` should be set relative to the `config.yaml` file itself (e.g., `"./FRAMEWORK_CONTEXT.md"` if `FRAMEWORK_CONTEXT.md` is in the same directory as `config.yaml`). The example project is set up this way.
+1. **Set up your API key:**
+   ```bash
+   export GEMINI_API_KEY=your_actual_gemini_api_key
+   ```
 
-3.  **Run the Framework:**
-    From within your new project directory (e.g., `my-first-keystone-project`):
-    ```bash
-    python /path/to/KeystoneAI-Framework/run_framework.py --config ./config/config.yaml
-    ```
-    *(Adjust `/path/to/KeystoneAI-Framework/` to the actual path where you cloned the framework.)*
+2. **Run the framework directly:**
+   ```bash
+   cd KeystoneAI-Framework
+   ./start_framework.sh
+   ```
+   This will initialize the framework with the default configuration.
 
-    You should see initialization logs, then:
-    ```
-    [System]: Framework Core Application started. Type /help for available commands.
-    ```
-    Followed by Catalyst's initial message. If you encounter API errors (like 429 rate limit or model access issues for preview models), ensure your Gemini API key is active, billing is set up if required for the chosen model, or try a model with more lenient free tier access like `gemini-2.5-flash-preview-04-17`.
+3. **Run from another directory:**
+   You can also install the framework scripts in any directory:
+   ```bash
+   cd KeystoneAI-Framework
+   ./install_links.sh /path/to/your/project
+   cd /path/to/your/project
+   ./start_framework.sh
+   ```
+
+### Method 2: Using the Example Project
+
+1. **Install scripts to the example project:**
+   ```bash
+   cd KeystoneAI-Framework
+   ./install_links.sh ./example-project
+   cd example-project
+   ./start_framework.sh
+   ```
+
+2. **Or copy the example project:**
+   ```bash
+   # Example: Create a new project based on the example
+   cp -r ~/KeystoneAI-Framework/example-project ~/my-projects/my-first-keystone-project
+   cd ~/KeystoneAI-Framework
+   ./install_links.sh ~/my-projects/my-first-keystone-project
+   cd ~/my-projects/my-first-keystone-project
+   ./start_framework.sh
+   ```
+
+### Method 3: Manual Setup
+
+1. **Create configuration files in your project:**
+   ```bash
+   mkdir -p my-project/config
+   cp ~/KeystoneAI-Framework/config/*.example my-project/config/
+   # Remove .example extension
+   cd my-project/config
+   mv config.yaml.example config.yaml
+   mv FRAMEWORK_CONTEXT.md.example FRAMEWORK_CONTEXT.md
+   ```
+
+2. **Run the framework with your config:**
+   ```bash
+   python ~/KeystoneAI-Framework/run_fixed.py
+   ```
+
+### Running for the First Time
+
+When you start the framework, you should see:
+```
+[System]: Framework Core Application started. Type /help for available commands.
+```
+Followed by Catalyst's initial message. If you encounter API errors (like 429 rate limit or model access issues for preview models), ensure your Gemini API key is active, billing is set up if required for the chosen model, or try a model with more lenient free tier access like `gemini-2.5-flash-preview-04-17`.
 
 ## Interacting with the Framework
 
@@ -103,7 +141,18 @@ The easiest way to get started is by using the included `example-project`.
     ```
     > Hello Catalyst, I'd like to plan a new software project.
     (Catalyst): Excellent! I can help with that. Let's use the MAIA-Workflow to structure our planning. To begin, could you tell me a bit about the project's main goal?
+    
+    > I'd like to switch to Forge to discuss implementation.
+    > /persona forge
+    [System]: Active persona switched to Forge.
+    
+    > Can you implement a basic Python script for this project?
+    (Forge): I'd be happy to implement a Python script for your project. Let me outline an approach based on the details you've provided...
     ```
+*   **Utility Scripts:**
+    * `restart_clean.sh`: Completely reset and restart the framework for a fresh state.
+    * `clear_chat_history.sh`: Clear temporary files and chat history without restarting.
+    * `diagnose_framework.py`: Check if your framework setup is correct and diagnose issues.
 
 ## Special Commands
 
@@ -114,6 +163,7 @@ Use these commands in the prompt for framework control:
 *   `/clear`: Clears the conversation history (system prompts may be preserved).
 *   `/system <message>`: Adds a new system-level instruction to the current conversation.
 *   `/debug`: Toggles debug mode for more verbose output (useful for developers).
+*   `/persona <id>`: Switches between AI personas (e.g., `/persona forge`, `/persona catalyst`).
 
 ## Working with Tools (TEPS & ICERC)
 
@@ -133,6 +183,8 @@ For more detailed information, please refer to:
 *   **`docs/USER_GUIDE.md`**: Comprehensive guide for users (found in the main KeystoneAI-Framework repository).
 *   **`docs/DEVELOPER_GUIDE_V2.md`**: For extending or contributing to the framework.
 *   **`docs/api_reference.md`**: Detailed API documentation.
+*   **`QUICKSTART.md`**: Quick guide to get started with the framework.
+*   **`PERSONA_SWITCHING.md`**: Guide to effectively switch between personas and troubleshoot issues.
 
 ## Development & Testing
 

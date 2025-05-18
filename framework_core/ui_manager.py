@@ -68,6 +68,16 @@ class UserInterfaceManager:
         formatted_message = self._format_assistant_message(message)
         self.output_handler(formatted_message)
         
+    def set_assistant_prefix(self, prefix: str) -> None:
+        """
+        Set a new assistant prefix for message display.
+        
+        Args:
+            prefix: The new prefix to use for assistant messages
+        """
+        self.assistant_prefix = prefix
+        self.logger.debug(f"Assistant prefix updated to: {prefix}")
+        
     def display_system_message(self, message: str) -> None:
         """
         Display a system message to the user.

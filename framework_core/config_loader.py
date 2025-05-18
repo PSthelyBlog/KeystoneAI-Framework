@@ -82,6 +82,10 @@ class ConfigurationManager:
             "api_key_env_var": "GEMINI_API_KEY",
             "context_definition_file": "./FRAMEWORK_CONTEXT.md",
             
+            "framework": {
+                "default_persona": "catalyst", # Default persona to use at startup
+            },
+            
             "llm_settings": {
                 "gemini": { # CHANGED from gemini_2_5_pro
                     "model_name": "gemini-2.5-flash-preview-04-17",
@@ -113,7 +117,7 @@ class ConfigurationManager:
             
             "ui": {
                 "input_prompt": "> ",
-                "assistant_prefix": "(AI): ",
+                "assistant_prefix": "(Catalyst): ", # Default matches the default_persona for better UX
                 "system_prefix": "[System]: ",
                 "error_prefix": "[Error]: ",
                 "use_color": True
@@ -260,3 +264,12 @@ class ConfigurationManager:
             UI settings dictionary
         """
         return self.config.get("ui", {})
+        
+    def get_framework_settings(self) -> Dict[str, Any]:
+        """
+        Get the framework general settings.
+        
+        Returns:
+            Framework settings dictionary
+        """
+        return self.config.get("framework", {})
